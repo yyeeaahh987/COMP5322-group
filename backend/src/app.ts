@@ -6,6 +6,19 @@ dotenv.config()
 // import mongoose from 'mongoose'
 
 import bodyParser from "body-parser";
+import mysql from 'mysql'
+
+const DATABASE_URL = process.env.DATABASE_URL
+const DATABASE_NAME = process.env.DATABASE_NAME
+const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD
+const DATABASE_DATABASE = process.env.DATABASE_DATABASE
+
+const connection = mysql.createConnection({
+    host: DATABASE_URL,
+    user: DATABASE_NAME,
+    password: DATABASE_PASSWORD,
+    database: DATABASE_DATABASE
+})
 // import fs from 'fs';
 // import https from 'https'
 // import telegramRouter from './router/telegramRouter';
@@ -49,6 +62,17 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 
 app.get("/toto", (req: Request, res: Response) => {
+    
+
+
+    connection.connect()
+
+    connection.query('select * from user;', (err: any, rows: any, fields: any) => {
+        if (err) throw err
+        console.log('The solution is: ', rows)
+    })
+
+    connection.end()
     res.send("Hello toto")
 })
 

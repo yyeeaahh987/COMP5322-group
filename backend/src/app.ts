@@ -19,6 +19,14 @@ const connection = mysql.createConnection({
     password: DATABASE_PASSWORD,
     database: DATABASE_DATABASE
 })
+
+// connection.connect(function(err){
+//     if(!err) {
+//         console.log("Database is connected");
+//     } else {
+//         console.log("Error while connecting with database");
+//     }
+// });
 // import fs from 'fs';
 // import https from 'https'
 // import telegramRouter from './router/telegramRouter';
@@ -33,6 +41,9 @@ const connection = mysql.createConnection({
 // const externalApiService = new ExternalApiService()
 // import {CronJobService} from './services/cronJobService'
 // const cronJobService = new CronJobService()
+
+import userRouter from './router/userRouter';
+
 const app: Application = express()
 const port: number = 8080
 // const httpsPort: number = 8443
@@ -41,6 +52,9 @@ app.use(cors({
 }));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use('/user', userRouter);
+
 // const sslCert = fs.readFileSync(`${__dirname}/B5A96CBA293C33D986D193CA56347609.txt`)
 // const key = fs.readFileSync(`/etc/letsencrypt/live/api.loanshark.tech/privkey.pem`)
 // const cert = fs.readFileSync(`/etc/letsencrypt/live/api.loanshark.tech/fullchain.pem`)
@@ -68,8 +82,18 @@ app.get("/toto", (req: Request, res: Response) => {
     connection.connect()
 
     connection.query('select * from user;', (err: any, rows: any, fields: any) => {
-        if (err) throw err
+        if (err) {
+            throw err
+        }
+        
         console.log('The solution is: ', rows)
+        console.log(rows[0])
+        // console.log(rows[0].userId)
+        // console.log(rows[0].user_id)
+        console.log(rows[0].USER_ID)
+        // console.log(rows[0].solution)
+        // console.log(rows[0].RowDataPacket)
+        // console.log(rows[0].RowDataPacket.user_id)
     })
 
     connection.end()

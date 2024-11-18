@@ -11,7 +11,9 @@ router.post('/getUserDetailById', async function (req: Request, res: Response) {
         message: "",
         result: null
     }
+    console.log(`req.body`,req.body)
     const { userId } = req.body
+    console.log(`userId`,userId)
     const result = await UserService.getUserDetailById(userId);
     console.log(`result`, result)
     if (result == null) {
@@ -21,6 +23,7 @@ router.post('/getUserDetailById', async function (req: Request, res: Response) {
     } else {
         resultObj.code = ReturnStatusCode.SUCCESS
         resultObj.message = "success"
+        resultObj.result = result
         res.status(200).json(resultObj)
     }
 });

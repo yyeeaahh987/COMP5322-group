@@ -43,6 +43,7 @@ const connection = mysql.createConnection({
 // const cronJobService = new CronJobService()
 
 import userRouter from './router/userRouter';
+import itemRouter from "./router/itemRouter";
 
 const app: Application = express()
 const port: number = 8080
@@ -50,10 +51,11 @@ const port: number = 8080
 app.use(cors({
     origin: '*'
 }));
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json({limit: '5000mb'}))
+app.use(bodyParser.urlencoded({ limit: '5000mb', extended: true }))
 
 app.use('/user', userRouter);
+app.use('/item', itemRouter);
 
 // const sslCert = fs.readFileSync(`${__dirname}/B5A96CBA293C33D986D193CA56347609.txt`)
 // const key = fs.readFileSync(`/etc/letsencrypt/live/api.loanshark.tech/privkey.pem`)

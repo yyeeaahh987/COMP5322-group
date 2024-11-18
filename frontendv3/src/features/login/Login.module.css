@@ -79,3 +79,12 @@
   opacity: 1;
   transition: 0s;
 }
+
+.sign-in-box{
+  background-color: lightgrey;
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  padding: 20px;
+  box-sizing: border-box;
+}

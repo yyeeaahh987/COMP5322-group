@@ -8,3 +8,9 @@ export const postRequestOptions = {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ title: 'React POST Request Example' })
 };
+
+export const getRequestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+    // body: JSON.stringify({ title: 'React POST Request Example' })
+};

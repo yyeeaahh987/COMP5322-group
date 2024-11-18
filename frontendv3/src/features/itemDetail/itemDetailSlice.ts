@@ -1,12 +1,14 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
 import type { AppThunk } from "../../app/store"
+import { postRequestOptions, REACT_BACKEND_SERVER } from "../../utils/constant"
 // import { fetchCount } from "./counterAPI"
 
 export interface ItemDetailSliceState {
   status: "idle" | "loading" | "failed"
   productName: string
   productUnit: string
+  productImage:string
   inStock: boolean
   price: number
   stockAmt: number
@@ -23,6 +25,7 @@ export interface ItemDetailSliceState {
 const initialState: ItemDetailSliceState = {
   status: "idle",
   productName: "",
+  productImage:"",
   productUnit: "0g",
   inStock: false,
   price: 0.00,
@@ -44,77 +47,83 @@ export const itemDetailSlice = createAppSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: create => ({
-    login: create.reducer(state => {
+    // login: create.reducer(state => {
 
-    }),
-    validateLogin: create.asyncThunk(async (data: any) => {
-      const response = await fetch(amount)
-      // The value we return becomes the `fulfilled` action payload
-      return response.data
-      console.log(`async`, data)
-      return true;
-    }, {
-      pending: state => {
-        state.status = "loading"
-      },
-      fulfilled: (state, action) => {
-        state.status = "idle"
-        // if (action.payload != null) {
-        //   state.loginSuccess = true
-        // } else {
-        //   state.loginSuccess = false
-        // }
-      },
-      rejected: state => {
-        state.status = "failed"
-      },
-    }),
+    // }),
+    // validateLogin: create.asyncThunk(async (data: any) => {
+    //   // const response = await fetch(amount)
+    //   // // The value we return becomes the `fulfilled` action payload
+    //   // return response.data
+    //   // console.log(`async`, data)
+    //   // return true;
+    // }, {
+    //   pending: state => {
+    //     state.status = "loading"
+    //   },
+    //   fulfilled: (state, action) => {
+    //     state.status = "idle"
+    //     // if (action.payload != null) {
+    //     //   state.loginSuccess = true
+    //     // } else {
+    //     //   state.loginSuccess = false
+    //     // }
+    //   },
+    //   rejected: state => {
+    //     state.status = "failed"
+    //   },
+    // }),
 
-    getItemByItemId: create.asyncThunk(async (data: any) => {
-      // const response = await callAPI
-      console.log(`async`, data)
+    getItemByItemId: create.asyncThunk(
+      async (data: any) => {
+        // const response = await callAPI
+        console.log(`async`, data)
+        let requestOption ={
+          ...postRequestOptions,
+          body: JSON.stringify({ 
+            itemId: data
+          })
+        }
 
-      // const requestOptions = {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ title: 'React POST Request Example' })
-      // };
-      // fetch('https://reqres.in/api/posts', postRequestOptions)
-      //   .then(response => response.json())
-      //   .then(data => this.setState({ postId: data.id }));
+        const response = await fetch(`${REACT_BACKEND_SERVER}/item/getItemByItemId`, requestOption)
+        const result = await response.json()
+        console.log(`result`, result)
+        return result?.result??null
+      }, 
+      {
+        pending: state => {
+          state.status = "loading"
+        },
+        fulfilled: (state, action) => {
+          console.log(`action`,action)
+          state.status = "idle"
+          if(action.payload !== null){
+            state.productName= action.payload.ENG_NAME + action.payload.CHI_NAME
+            state.productImage= action.payload.IMAGE
+            state.productUnit= action.payload.UNIT
+            if((action?.payload?.AMOUNT??0) >0){
+              state.inStock = true     
+            }else{
+              state.inStock = false
+            }
+            state.stockAmt = action?.payload?.AMOUNT??0
+            state.price = action?.payload?.PRICE??0.00
+            state.descriptionDetail = action?.payload?.DESCRIPTION??""
+          }else{
 
-
-      // const response = await fetch(`${REACT_BACKEND_SERVER}`, postRequestOptions)
-      // const result = await response.json()
-      // console.log(`result`, result)
-      // if (result.status === 200) {
-      //   //set something
-      // } else {
-      //   //set something
-      // }
-      // return response.data
-    }, {
-      pending: state => {
-        state.status = "loading"
-      },
-      fulfilled: (state, action) => {
-        state.status = "idle"
-        // if (action.payload != null) {
-        //   state.loginSuccess = true
-        // } else {
-        //   state.loginSuccess = false
-        // }
-      },
-      rejected: state => {
-        state.status = "failed"
-      },
-    }),
+          }
+        },
+        rejected: state => {
+          state.status = "failed"
+        },
+      }
+    ),
 
   }),
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
   selectors: {
     selectProductName: data => data.productName,
+    selectProductImage: data => data.productImage,
     selectProductUnit: data => data.productUnit,
     selectInStock: data => data.inStock,
     selectPrice: data => data.price,
@@ -131,12 +140,13 @@ export const itemDetailSlice = createAppSlice({
 })
 
 // Action creators are generated for each case reducer function.
-export const { login, validateLogin } =
+export const { getItemByItemId } =
   itemDetailSlice.actions
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
 export const {
   selectProductName,
+  selectProductImage,
   selectProductUnit,
   selectInStock,
   selectPrice,

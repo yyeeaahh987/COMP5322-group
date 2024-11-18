@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import styles from "./Login.module.css"
 import Grid from '@mui/material/Grid2';
-import { Button, Input, TextField } from "@mui/material"
+import { Box, Button, Input, TextField } from "@mui/material"
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
     validateLogin
@@ -36,11 +36,11 @@ export const Login = () => {
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm({ 
-        defaultValues: { 
+    } = useForm({
+        defaultValues: {
             accountName: "",
             accountPasswowrd: "",
-        } 
+        }
     });
     const onSubmit: SubmitHandler<any> = (data) => {
         console.log(data)
@@ -58,25 +58,73 @@ export const Login = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container>
                     <Grid size={12}>
-                        <Controller
-                            name="accountName"
-                            control={control}
-                            render={({ field }) => <TextField  {...field} />}
-                        />
+                        <h2>仲未係會員?​ 快啲加入, 有好多優惠等緊你！</h2>
                     </Grid>
-                    <Grid size={12}>
-                        <Controller
-                            name="accountPasswowrd"
-                            control={control}
-                            render={({ field }) => <TextField  {...field} />}
-                        />
-                        {/* {errors.exampleRequired && <span>This field is required</span>} */}
+                    <Grid size={6} justifyContent={"center"}>
+                        <Box className={"sign-in-box"}>
+                            <Grid size={12}>
+                                登入
+                            </Grid>
+                            <Grid size={12}>
+                                帳戶
+                            </Grid>
+                            <Grid size={12}>
+                                <Controller
+                                    name="accountName"
+                                    control={control}
+                                    render={({ field }) => <TextField variant="standard" {...field} />}
+                                />
+                            </Grid>
+                            <Grid size={12}>
+                                密碼
+                            </Grid>
+                            <Grid size={12}>
+                                <Controller
+                                    name="accountPasswowrd"
+                                    control={control}
+                                    render={({ field }) => <TextField variant="standard"  {...field} />}
+                                />
+                            </Grid>
+                        </Box>
+                        <Button className="submit-button" variant="outlined" type="submit">登入</Button>
+                        <Button className="clear-button" variant="outlined" onClick={handleReset}>清取</Button>
+                    </Grid>
+
+                    <Grid size={6} justifyContent={"center"}>
+                        <Box className={"sign-in-box"}>
+                            <Grid size={12}>
+                            註冊
+                            </Grid>
+                            <Grid size={12}>
+                                帳戶
+                            </Grid>
+                            <Grid size={12}>
+                                <Controller
+                                    name="accountName"
+                                    control={control}
+                                    render={({ field }) => <TextField variant="standard" {...field} />}
+                                />
+                            </Grid>
+                            <Grid size={12}>
+                                密碼
+                            </Grid>
+                            <Grid size={12}>
+                                <Controller
+                                    name="accountPasswowrd"
+                                    control={control}
+                                    render={({ field }) => <TextField variant="standard"  {...field} />}
+                                />
+                            </Grid>
+                        </Box>
+                        <Button className="submit-button" variant="outlined">註冊</Button>
+                        <Button className="clear-button" variant="outlined">清取</Button>
+                    </Grid>
+
+                    <Grid size={6}>
+
                     </Grid>
                     <Grid size={6}>
-                        <Button className="submit-button" variant="outlined" type="submit">Submit</Button>
-                    </Grid>
-                    <Grid size={6}>
-                        <Button className="clear-button" variant="outlined" onClick={handleReset}>Clear</Button>
+
                     </Grid>
                 </Grid>
             </form>

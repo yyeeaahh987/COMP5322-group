@@ -31,6 +31,34 @@ export async function getItemByItemId(itemId: string) {
     return null;
 }
 
+export async function getTodaySuggestList(){
+    try {
+        let sql = `select * from ITEM i,SUGGEST_ITEM si
+                    where si.ITEM_ID =i.ITEM_ID 
+                    order by si.DISPLAY_ORDER`
+        const [rows, fields]: any = await connection.promise().query(sql);
+        console.log(`rows`, rows)
+        let result = rows?rows : null;
+        console.log(`result`, result)
+        return result
+    } catch (e) {
+        console.error(`getTodaySuggestList `, e)
+    }
+    return null;
+}
+
+export async function uploadImageByItemId(file:string, itemId:string) {
+    console.log(`itemId`,itemId)
+    try {
+        let sql = `UPDATE ITEM SET IMAGE = ? WHERE ITEM_ID = ?`
+        const [rows, fields]: any = await connection.promise().query(sql, [file,itemId]);
+        return null
+    } catch (e) {
+        console.error(`getItemByItemId `, e)
+    }
+    return null;
+}
+
 export async function createItem(category: string, subCategory: string, brand: string, image: string, engName: string, chiName: string, price: string, description: string, origin: string, srchName: string, discount: string, rating: string, used: string) {
     try {
         let sql = `INSERT INTO ITEM (ITEM_ID,CATEGORY,SUB_CATEGORY,BRAND,IMAGE,ENG_NAME,CHI_NAME,PRICE,DESCRIPTION,ORIGIN,SRCH_NAME,DISCOUNT,RATING,CREATED_BY,CREATED_DATE,USED,LAST_UPDATED_BY,LAST_UPDATED_DATE) 

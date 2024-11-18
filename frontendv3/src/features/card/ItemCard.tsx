@@ -63,9 +63,9 @@ export const ItemCard = ((props:ItemCardProps) => {
     };
 
     const handleClickItem = ()=>{
-        console.log(`handleClickItem`,handleClickItem)
-        console.log(`${REACT_APP_DOMAIN}/home`)
-        window.location.href = `${REACT_APP_DOMAIN}${props.redirectLink}`
+        console.log(`handleClickItem`)
+        // console.log(`${REACT_APP_DOMAIN}/home`)
+        window.location.href = `${props.redirectLink}`
     }
     
     return (

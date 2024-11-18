@@ -14,6 +14,7 @@ import { REACT_APP_DOMAIN } from "./utils/constant"
 import { ItemCard } from "./features/card/ItemCard"
 import NoMatch from "./pages/NoMatch"
 import { ItemDetail } from "./features/itemDetail/ItemDetail"
+import { Overview } from "./pages/Overview"
 
 
 const router = createBrowserRouter([
@@ -25,6 +26,12 @@ const router = createBrowserRouter([
       //   index: true,
       //   element: <Home />,
       // },
+      {
+        path: "overview",
+        // Single route in lazy file
+        // lazy: () => import("./features/home/Home"),
+        element: <Overview></Overview>,
+      },
       {
         path: "item/detail/:itemId",
         // Single route in lazy file

@@ -5,7 +5,7 @@ import { ReturnStatusCode, ReturnStatusMessage } from '../enum/enum'
 const router = express.Router();
 
 router.post('/getItemByItemId', async function (req: Request, res: Response) {
-    // console.log(`sendEmail`,req.body)
+    console.log(`getItemByItemId`)
     let resultObj = {
         code: 0,
         message: "",
@@ -27,7 +27,7 @@ router.post('/getItemByItemId', async function (req: Request, res: Response) {
 });
 
 router.get('/getTodaySuggestList', async function (req: Request, res: Response) {
-    // console.log(`sendEmail`,req.body)
+    console.log(`getTodaySuggestList`)
     let resultObj = {
         code: 0,
         message: "",
@@ -48,7 +48,7 @@ router.get('/getTodaySuggestList', async function (req: Request, res: Response) 
 });
 
 router.post('/uploadImage', async function (req: Request, res: Response) {
-    // console.log(`sendEmail`,req.body)
+    console.log(`uploadImage`)
     let resultObj = {
         code: 0,
         message: "",

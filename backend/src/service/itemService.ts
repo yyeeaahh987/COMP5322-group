@@ -59,6 +59,20 @@ export async function uploadImageByItemId(file:string, itemId:string) {
     return null;
 }
 
+export async function getSubcategoryList(category:string, subcategory:string){
+    try {
+        let sql = `select * from ITEM where CATEGORY = ? and SUB_CATEGORY = ?`
+        const [rows, fields]: any = await connection.promise().query(sql, [category,subcategory]);
+        console.log(`rows`, rows)
+        let result = rows?rows : null;
+        console.log(`result`, result)
+        return result
+    } catch (e) {
+        console.error(`getSubcategoryList `, e)
+    }
+    return null;
+}
+
 export async function createItem(category: string, subCategory: string, brand: string, image: string, engName: string, chiName: string, price: string, description: string, origin: string, srchName: string, discount: string, rating: string, used: string) {
     try {
         let sql = `INSERT INTO ITEM (ITEM_ID,CATEGORY,SUB_CATEGORY,BRAND,IMAGE,ENG_NAME,CHI_NAME,PRICE,DESCRIPTION,ORIGIN,SRCH_NAME,DISCOUNT,RATING,CREATED_BY,CREATED_DATE,USED,LAST_UPDATED_BY,LAST_UPDATED_DATE) 

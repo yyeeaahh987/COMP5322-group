@@ -15,156 +15,10 @@ import { ItemCard } from "./features/card/ItemCard"
 import NoMatch from "./pages/NoMatch"
 import { ItemDetail } from "./features/itemDetail/ItemDetail"
 import { Overview } from "./pages/Overview"
+import { Promotion } from "./pages/Promotion"
+import { ShoppingCart } from "./pages/ShoppingCart"
 
 
-const router = createBrowserRouter([
-  {
-    path: "/home",
-    element: <Home />,
-    children: [
-      // {
-      //   index: true,
-      //   element: <Home />,
-      // },
-      {
-        path: "overview",
-        // Single route in lazy file
-        // lazy: () => import("./features/home/Home"),
-        element: <Overview></Overview>,
-      },
-      {
-        path: "item/detail/:itemId",
-        // Single route in lazy file
-        // lazy: () => import("./features/home/Home"),
-        element: <ItemDetail></ItemDetail>,
-      },
-      // {
-      //   path: "item",
-      //   // Component: ItemDetail,
-      //   // async lazy() {
-      //   //   // Multiple routes in lazy file
-      //   //   let { DashboardLayout } = await import("./pages/Dashboard");
-      //   //   return { Component: DashboardLayout };
-      //   // },
-      //   children: [
-      //     // {
-      //     //   index: true,
-      //     //   async lazy() {
-      //     //     let { DashboardIndex } = await import("./pages/Dashboard");
-      //     //     return { Component: DashboardIndex };
-      //     //   },
-      //     // },
-      //     {
-      //       path: ":id",
-      //       element: <ItemDetail></ItemDetail>,
-      //       // async lazy() {
-      //       //   let { DashboardIndex } = await import("./features/card/ItemCard");
-      //       //   return { Component: DashboardIndex };
-      //       // },
-      //     },
-      //   ],
-      // },
-      // {
-      //   path: "*",
-      //   element: <NoMatch />,
-      // },
-    ],
-  },
-  {
-    path: "/",
-    element: <Login />,
-    // children: [
-    //   // {
-    //   //   index: true,
-    //   //   element: <Home />,
-    //   // },
-    //   {
-    //     path: "home",
-    //     // Single route in lazy file
-    //     // lazy: () => import("./features/home/Home"),
-    //     element: <Home></Home>,
-    //   },
-    //   {
-    //     path: "item",
-    //     // Component: ItemDetail,
-    //     // async lazy() {
-    //     //   // Multiple routes in lazy file
-    //     //   let { DashboardLayout } = await import("./pages/Dashboard");
-    //     //   return { Component: DashboardLayout };
-    //     // },
-    //     children: [
-    //       // {
-    //       //   index: true,
-    //       //   async lazy() {
-    //       //     let { DashboardIndex } = await import("./pages/Dashboard");
-    //       //     return { Component: DashboardIndex };
-    //       //   },
-    //       // },
-    //       {
-    //         path: ":id",
-    //         element: <ItemDetail></ItemDetail>,
-    //         // async lazy() {
-    //         //   let { DashboardIndex } = await import("./features/card/ItemCard");
-    //         //   return { Component: DashboardIndex };
-    //         // },
-    //       },
-    //     ],
-    //   },
-    // ],
-  },
-  {
-    path: "*",
-    element: <NoMatch />,
-  }
-
-
-  // {
-  //   path: "/home",
-  //   element: <Home />,
-  //   // children: [
-  //   //   // {
-  //   //   //   index: true,
-  //   //   //   element: <Home />,
-  //   //   // },
-  //   //   {
-  //   //     path: "home",
-  //   //     // Single route in lazy file
-  //   //     // lazy: () => import("./features/home/Home"),
-  //   //     Component: Home,
-  //   //   },
-  //   //   {
-  //   //     path: "item",
-  //   //     // Component: ItemDetail,
-  //   //     // async lazy() {
-  //   //     //   // Multiple routes in lazy file
-  //   //     //   let { DashboardLayout } = await import("./pages/Dashboard");
-  //   //     //   return { Component: DashboardLayout };
-  //   //     // },
-  //   //     children: [
-  //   //       // {
-  //   //       //   index: true,
-  //   //       //   async lazy() {
-  //   //       //     let { DashboardIndex } = await import("./pages/Dashboard");
-  //   //       //     return { Component: DashboardIndex };
-  //   //       //   },
-  //   //       // },
-  //   //       {
-  //   //         path: ":id",
-  //   //         Component: ItemDetail,
-  //   //         // async lazy() {
-  //   //         //   let { DashboardIndex } = await import("./features/card/ItemCard");
-  //   //         //   return { Component: DashboardIndex };
-  //   //         // },
-  //   //       },
-  //   //     ],
-  //   //   },
-  //   //   {
-  //   //     path: "*",
-  //   //     element: <NoMatch />,
-  //   //   },
-  //   // ],
-  // },
-]);
 
 
 const App = () => {
@@ -172,11 +26,85 @@ const App = () => {
   const dispatch = useAppDispatch()
   const loginSuccess = useAppSelector(selectLoginSuccess)
   
+  const router = createBrowserRouter([
+    {
+      path: "/home",
+      element: (
+        <Home/>
+      ),
+      children: [
+        // {
+        //   index: true,
+        //   element: <Home />,
+        // },
+        {
+          path: "promotion",
+          // Single route in lazy file
+          // lazy: () => import("./features/home/Home"),
+          element: <Promotion></Promotion>,
+        },
+        {
+          path: "overview/:category/:subcategory",
+          // Single route in lazy file
+          // lazy: () => import("./features/home/Home"),
+          element: <Overview></Overview>,
+        },
+        {
+          path: "cart",
+          element: <ShoppingCart></ShoppingCart>,
+        },
+        {
+          path: "item/detail/:itemId",
+          // Single route in lazy file
+          // lazy: () => import("./features/home/Home"),
+          element: <ItemDetail></ItemDetail>,
+        },
+        // {
+        //   path: "item",
+        //   // Component: ItemDetail,
+        //   // async lazy() {
+        //   //   // Multiple routes in lazy file
+        //   //   let { DashboardLayout } = await import("./pages/Dashboard");
+        //   //   return { Component: DashboardLayout };
+        //   // },
+        //   children: [
+        //     // {
+        //     //   index: true,
+        //     //   async lazy() {
+        //     //     let { DashboardIndex } = await import("./pages/Dashboard");
+        //     //     return { Component: DashboardIndex };
+        //     //   },
+        //     // },
+        //     {
+        //       path: ":id",
+        //       element: <ItemDetail></ItemDetail>,
+        //       // async lazy() {
+        //       //   let { DashboardIndex } = await import("./features/card/ItemCard");
+        //       //   return { Component: DashboardIndex };
+        //       // },
+        //     },
+        //   ],
+        // },
+        // {
+        //   path: "*",
+        //   element: <NoMatch />,
+        // },
+      ],
+    },
+    {
+      path: "/",
+      element: <Login />,
+    },
+    {
+      path: "*",
+      element: <NoMatch />,
+    }
+  ]);
+
   useEffect(() => {
+    console.log(`loginSuccess`,loginSuccess)
     if(loginSuccess === true){
-      console.log(`${REACT_APP_DOMAIN}`)
-      console.log(`${REACT_APP_DOMAIN}/home`)
-      window.location.href = `${REACT_APP_DOMAIN}/home`
+      window.location.href = `${REACT_APP_DOMAIN}/home/promotion`
     }
   }, [loginSuccess])
 

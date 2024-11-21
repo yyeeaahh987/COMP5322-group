@@ -16,6 +16,23 @@ const connection = mysql.createPool({
     database: DATABASE_DATABASE
 })
 
+export async function validateAccountLogin(name:string, password:string) {
+    try {
+        let sql = `select count(*) as count from USER WHERE user_id = ? and PASSWORD = ?`
+        const [rows, fields]: any = await connection.promise().query(sql, [name,password]);
+        console.log(`rows`, rows)
+        let result = rows?.[0]?.count ?? 0;
+        console.log(`result`, result)
+        if(result ===0){
+            return false;
+        }else{
+            return true;
+        }    } catch (e) {
+
+    }
+    return false;
+}
+
 export async function getUserDetailById(userId: string) {
     try {
         let sql = `select * from USER WHERE user_id = ? and used ='1'`

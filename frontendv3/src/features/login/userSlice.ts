@@ -1,6 +1,7 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
 import type { AppThunk } from "../../app/store"
+import { postRequestOptions, REACT_BACKEND_SERVER } from "../../utils/constant"
 // import { fetchCount } from "./counterAPI"
 
 export interface UserSliceState {
@@ -53,16 +54,29 @@ export const userSlice = createAppSlice({
 
     }),
     validateLogin:create.asyncThunk(async(data:any) =>{
-      // const response = await callAPI
-      console.log(`async`,data)
-      return true;
+      console.log(`async`, data)
+      let requestOption ={
+        ...postRequestOptions,
+        body: JSON.stringify({ 
+          name:data.loginAccountName,
+          password:data.loginAccountPasswowrd
+        })
+      }
+
+      const response = await fetch(`${REACT_BACKEND_SERVER}/user/login`, requestOption)
+      const result = await response.json()
+      console.log(`result`, result)
+      return result?.result??false
+
+
     },{
       pending: state => {
         state.status = "loading"
       },
       fulfilled: (state, action) => {
         state.status = "idle"
-        if(action.payload !=null){
+        console.log(`action`,action.payload)
+        if(action.payload ==true){
           state.loginSuccess = true
         }else{
           state.loginSuccess = false
@@ -72,7 +86,9 @@ export const userSlice = createAppSlice({
         state.status = "failed"
       },
     }),
-
+    logout:create.reducer(state =>{
+      state = initialState
+    }),
     // increment: create.reducer(state => {
     //   // Redux Toolkit allows us to write "mutating" logic in reducers. It
     //   // doesn't actually mutate the state because it uses the Immer library,
@@ -140,7 +156,7 @@ export const userSlice = createAppSlice({
 })
 
 // Action creators are generated for each case reducer function.
-export const {  login, validateLogin } =
+export const {  login, validateLogin, logout } =
   userSlice.actions
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.

@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import * as ItemService from '../service/itemService'
-import {ReturnStatusCode , ReturnStatusMessage} from '../enum/enum'
+import { ReturnStatusCode, ReturnStatusMessage } from '../enum/enum'
 
 const router = express.Router();
 
@@ -56,6 +56,28 @@ router.post('/uploadImage', async function (req: Request, res: Response) {
     }
     const { file, id } = req.body
     const result = await ItemService.uploadImageByItemId(file, id);
+    if (result == null) {
+        resultObj.code = ReturnStatusCode.NO_DATA_FOUND
+        resultObj.message = "no data found"
+        res.status(200).json(resultObj)
+    } else {
+        resultObj.code = ReturnStatusCode.SUCCESS
+        resultObj.message = "success"
+        resultObj.result = result
+        res.status(200).json(resultObj)
+    }
+});
+
+router.post('/getSubcategoryList', async function (req: Request, res: Response) {
+    // console.log(`sendEmail`,req.body)
+    let resultObj = {
+        code: 0,
+        message: "",
+        result: null
+    }
+    const { category, subcategory } = req.body
+    const result = await ItemService.getSubcategoryList(category, subcategory);
+    console.log(`result`, result)
     if (result == null) {
         resultObj.code = ReturnStatusCode.NO_DATA_FOUND
         resultObj.message = "no data found"

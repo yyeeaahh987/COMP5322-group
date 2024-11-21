@@ -9,7 +9,7 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import itemImage from "../../../img/item/001/big_1.jpg"
 import './Overview.css'
 import { TextField } from '@mui/material';
-import { getSuggestList, REACT_APP_DOMAIN, REACT_BACKEND_SERVER } from '../utils/itemFunction/itemFunction';
+import { getSubcategoryList, getSuggestList, REACT_APP_DOMAIN, REACT_BACKEND_SERVER } from '../utils/itemFunction/itemFunction';
 import { ItemCard } from '../features/card/ItemCard';
 // import {
 //     getItemByItemId,
@@ -31,6 +31,7 @@ interface IFormInput {
 export const Overview = () => {
     let { itemId } = useParams();
     console.log(`itemId`, itemId)
+    let { category, subcategory } = useParams();
     // const dispatch = useAppDispatch()
     // const productName = useAppSelector(selectProductName)
     // const productUnit = useAppSelector(selectProductUnit)
@@ -44,7 +45,7 @@ export const Overview = () => {
     const [productList, setProductList] = useState([])
     useEffect(() => {
         (async () => {
-            let list = await getSuggestList()
+            let list = await getSubcategoryList(category ? category : "", subcategory ? subcategory : "")
             console.log(`list`, list)
             setProductList(list)
         })
@@ -102,16 +103,16 @@ export const Overview = () => {
                         return (
                             <Grid size={2} key={index}>
                                 {/* <div > */}
-                                    {/* <img src={item.IMAGE}></img> */}
-                                    <ItemCard
-                                        imagePath={item.IMAGE}
-                                        altImage={"a"}
-                                        itemDesc={`${item?.ENG_NAME ?? ""} ${item?.CHI_NAME ?? ""}`}
-                                        price={item.PRICE}
-                                        addCartDisabled={((item?.AMOUNT ?? 0) > 0) ? false : true}
-                                        redirectLink={`${REACT_APP_DOMAIN}/home/item/detail/${item.ITEM_ID}`}
-                                    >
-                                    </ItemCard>
+                                {/* <img src={item.IMAGE}></img> */}
+                                <ItemCard
+                                    imagePath={item.IMAGE}
+                                    altImage={"a"}
+                                    itemDesc={`${item?.ENG_NAME ?? ""} ${item?.CHI_NAME ?? ""}`}
+                                    price={item.PRICE}
+                                    addCartDisabled={((item?.AMOUNT ?? 0) > 0) ? false : true}
+                                    redirectLink={`${REACT_APP_DOMAIN}/home/item/detail/${item.ITEM_ID}`}
+                                >
+                                </ItemCard>
                                 {/* </div> */}
                             </Grid>
                         )

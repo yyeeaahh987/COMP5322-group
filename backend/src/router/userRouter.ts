@@ -4,6 +4,30 @@ import {ReturnStatusCode , ReturnStatusMessage} from '../enum/enum'
 
 const router = express.Router();
 
+router.post('/login', async function (req: Request, res: Response) {
+    // console.log(`sendEmail`,req.body)
+    let resultObj = {
+        code: 0,
+        message: "",
+        result: false
+    }
+    console.log(`req.body`,req.body)
+    const { name, password } = req.body
+    console.log(`userId`,name, password)
+    const result = await UserService.validateAccountLogin(name, password);
+    console.log(`result`, result)
+    if (result == null) {
+        resultObj.code = ReturnStatusCode.NO_DATA_FOUND
+        resultObj.message = "no data found"
+        res.status(200).json(resultObj)
+    } else {
+        resultObj.code = ReturnStatusCode.SUCCESS
+        resultObj.message = "success"
+        resultObj.result = result
+        res.status(200).json(resultObj)
+    }
+});
+
 router.post('/getUserDetailById', async function (req: Request, res: Response) {
     // console.log(`sendEmail`,req.body)
     let resultObj = {

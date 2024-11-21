@@ -7,6 +7,8 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
     validateLogin
 } from "./userSlice"
+import { Header } from "../header/Header";
+import { Declare } from "../declare/Declare";
 
 // enum GenderEnum {
 //     female = "female",
@@ -19,8 +21,8 @@ import {
 //   }
 
 interface IFormInput {
-    accountName: string
-    accountPasswowrd: string
+    loginAccountName: string
+    loginAccountPasswowrd: string
 }
 
 export const Login = () => {
@@ -38,8 +40,8 @@ export const Login = () => {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            accountName: "",
-            accountPasswowrd: "",
+            loginAccountName: "",
+            loginAccountPasswowrd: "",
         }
     });
     const onSubmit: SubmitHandler<any> = (data) => {
@@ -49,12 +51,19 @@ export const Login = () => {
 
     function handleReset() {
         reset({
-            accountName: "",
-            accountPasswowrd: "",
+            loginAccountName: "",
+            loginAccountPasswowrd: "",
         })
     }
     return (
         <>
+            <Header></Header>
+
+            <Grid container>
+                <Grid size={12}>
+                    <span>nav bar</span>
+                </Grid>
+            </Grid>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container>
                     <Grid size={12}>
@@ -70,7 +79,7 @@ export const Login = () => {
                             </Grid>
                             <Grid size={12}>
                                 <Controller
-                                    name="accountName"
+                                    name="loginAccountName"
                                     control={control}
                                     render={({ field }) => <TextField variant="standard" {...field} />}
                                 />
@@ -80,7 +89,7 @@ export const Login = () => {
                             </Grid>
                             <Grid size={12}>
                                 <Controller
-                                    name="accountPasswowrd"
+                                    name="loginAccountPasswowrd"
                                     control={control}
                                     render={({ field }) => <TextField variant="standard"  {...field} />}
                                 />
@@ -93,27 +102,27 @@ export const Login = () => {
                     <Grid size={6} justifyContent={"center"}>
                         <Box className={"sign-in-box"}>
                             <Grid size={12}>
-                            註冊
+                                註冊
                             </Grid>
                             <Grid size={12}>
                                 帳戶
                             </Grid>
                             <Grid size={12}>
-                                <Controller
+                                {/* <Controller
                                     name="accountName"
                                     control={control}
                                     render={({ field }) => <TextField variant="standard" {...field} />}
-                                />
+                                /> */}
                             </Grid>
                             <Grid size={12}>
                                 密碼
                             </Grid>
                             <Grid size={12}>
-                                <Controller
+                                {/* <Controller
                                     name="accountPasswowrd"
                                     control={control}
                                     render={({ field }) => <TextField variant="standard"  {...field} />}
-                                />
+                                /> */}
                             </Grid>
                         </Box>
                         <Button className="submit-button" variant="outlined">註冊</Button>
@@ -128,59 +137,7 @@ export const Login = () => {
                     </Grid>
                 </Grid>
             </form>
+            <Declare></Declare>
         </>
-        // <div>
-        //   <div className={styles.row}>
-        //     <button
-        //       className={styles.button}
-        //       aria-label="Decrement value"
-        //       onClick={() => dispatch(decrement())}
-        //     >
-        //       -
-        //     </button>
-        //     <span aria-label="Count" className={styles.value}>
-        //       {count}
-        //     </span>
-        //     <button
-        //       className={styles.button}
-        //       aria-label="Increment value"
-        //       onClick={() => dispatch(increment())}
-        //     >
-        //       +
-        //     </button>
-        //   </div>
-        //   <div className={styles.row}>
-        //     <input
-        //       className={styles.textbox}
-        //       aria-label="Set increment amount"
-        //       value={incrementAmount}
-        //       type="number"
-        //       onChange={e => {
-        //         setIncrementAmount(e.target.value)
-        //       }}
-        //     />
-        //     <button
-        //       className={styles.button}
-        //       onClick={() => dispatch(incrementByAmount(incrementValue))}
-        //     >
-        //       Add Amount
-        //     </button>
-        //     <button
-        //       className={styles.asyncButton}
-        //       disabled={status !== "idle"}
-        //       onClick={() => dispatch(incrementAsync(incrementValue))}
-        //     >
-        //       Add Async
-        //     </button>
-        //     <button
-        //       className={styles.button}
-        //       onClick={() => {
-        //         dispatch(incrementIfOdd(incrementValue))
-        //       }}
-        //     >
-        //       Add If Odd
-        //     </button>
-        //   </div>
-        // </div>
     )
 }

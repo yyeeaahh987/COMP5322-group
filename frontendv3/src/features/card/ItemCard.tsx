@@ -31,13 +31,13 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     }),
     variants: [
         {
-            props: ({ expand }) => !expand,
+            props: ({ expand }:any) => !expand,
             style: {
                 transform: 'rotate(0deg)',
             },
         },
         {
-            props: ({ expand }) => !!expand,
+            props: ({ expand }:any) => !!expand,
             style: {
                 transform: 'rotate(180deg)',
             },

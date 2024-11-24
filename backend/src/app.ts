@@ -143,7 +143,7 @@ const cred = {
 
 const httpsServer = https.createServer(cred, app)
 httpsServer.listen(httpsPort)
-console.log(`hn porttps App is listening ot ${httpsPort} !`)
+console.log(`https ports App is listening on ${httpsPort} !`)
 
 // const httpsServer = https.createServer(cred, app)
 // httpsServer.listen(httpsPort)

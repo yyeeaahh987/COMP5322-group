@@ -4,7 +4,8 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 dotenv.config()
 // import mongoose from 'mongoose'
-
+import fs from 'fs';
+import https from 'https'
 import bodyParser from "body-parser";
 import mysql from 'mysql'
 
@@ -19,7 +20,7 @@ const connection = mysql.createConnection({
     password: DATABASE_PASSWORD,
     database: DATABASE_DATABASE
 })
-
+const httpsPort: number = 8443
 // connection.connect(function(err){
 //     if(!err) {
 //         console.log("Database is connected");
@@ -54,6 +55,7 @@ app.use(cors({
 app.use(bodyParser.json({limit: '5000mb'}))
 app.use(bodyParser.urlencoded({ limit: '5000mb', extended: true }))
 
+
 app.use('/user', userRouter);
 app.use('/item', itemRouter);
 
@@ -76,6 +78,12 @@ app.use('/item', itemRouter);
 //     db.once('open', () => console.log('Connected to Database'))
 // }
 
+/*
+this part for port forwading in ec2 to allow verify ssl cert
+*/
+app.get("/.well-known/pki-validation/B5A96CBA293C33D986D193CA56347609.txt", (req: Request, res: Response) => {
+    res.send(sslCert)
+})
 
 app.get("/toto", (req: Request, res: Response) => {
     
@@ -123,6 +131,19 @@ app.get("/toto", (req: Request, res: Response) => {
 app.listen(port, function () {
     console.log(`App is listening on port ${port} !`)
 })
+
+const sslCert = fs.readFileSync(`${__dirname}/B5A96CBA293C33D986D193CA56347609.txt`)
+const key = fs.readFileSync(`/etc/letsencrypt/live/api.loanshark.tech/privkey.pem`)
+const cert = fs.readFileSync(`/etc/letsencrypt/live/api.loanshark.tech/fullchain.pem`)
+
+const cred = {
+    key,
+    cert
+}
+
+const httpsServer = https.createServer(cred, app)
+httpsServer.listen(httpsPort)
+console.log(`hn porttps App is listening ot ${httpsPort} !`)
 
 // const httpsServer = https.createServer(cred, app)
 // httpsServer.listen(httpsPort)

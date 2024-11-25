@@ -5,12 +5,12 @@
 
 export const postRequestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Referrer-Policy': "unsafe-url" },
     body: JSON.stringify({ title: 'React POST Request Example' })
 };
 
 export const getRequestOptions = {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'Referrer-Policy': "unsafe-url" },
     // body: JSON.stringify({ title: 'React POST Request Example' })
 };

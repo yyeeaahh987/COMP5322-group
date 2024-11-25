@@ -9,7 +9,10 @@ const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
 // console.log(`BACKEND_SERVER item fucntion`,process.env)
 export const postRequestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+        'Content-Type': 'application/json', 
+        'Referrer-Policy': "unsafe-url"
+    },
     body: JSON.stringify({ title: 'React POST Request Example' })
 };
 

@@ -7,8 +7,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useAppDispatch } from '../../app/hooks';
 import { NavBar } from '../navbar/NavBar';
 import { Card, CardActions, CardContent, CardMedia, Collapse, styled } from '@mui/material';
-import { REACT_APP_DOMAIN } from '../../utils/constant';
-
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 

@@ -9,7 +9,7 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import itemImage from "../../../img/item/001/big_1.jpg"
 import './Overview.css'
 import { TextField } from '@mui/material';
-import { getSuggestList, REACT_APP_DOMAIN, REACT_BACKEND_SERVER } from '../utils/itemFunction/itemFunction';
+import { getSuggestList } from '../utils/itemFunction/itemFunction';
 import { ItemCard } from '../features/card/ItemCard';
 import img001 from '../../img/promotionBanner/001.jpg'
 import img002 from '../../img/promotionBanner/002.jpg'

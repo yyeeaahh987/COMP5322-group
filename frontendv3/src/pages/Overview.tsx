@@ -9,7 +9,7 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import itemImage from "../../../img/item/001/big_1.jpg"
 import './Overview.css'
 import { TextField } from '@mui/material';
-import { getSubcategoryList, getSuggestList, REACT_APP_DOMAIN, REACT_BACKEND_SERVER } from '../utils/itemFunction/itemFunction';
+import { getSubcategoryList, getSuggestList } from '../utils/itemFunction/itemFunction';
 import { ItemCard } from '../features/card/ItemCard';
 // import {
 //     getItemByItemId,
@@ -19,7 +19,7 @@ import { ItemCard } from '../features/card/ItemCard';
 //     selectProductName,
 //     selectProductUnit,
 //   } from "./itemDetailSlice"
-
+const DOMAIN = process.env.REACT_APP_DOMAIN;
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -110,7 +110,7 @@ export const Overview = () => {
                                     itemDesc={`${item?.ENG_NAME ?? ""} ${item?.CHI_NAME ?? ""}`}
                                     price={item.PRICE}
                                     addCartDisabled={((item?.AMOUNT ?? 0) > 0) ? false : true}
-                                    redirectLink={`${REACT_APP_DOMAIN}/home/item/detail/${item.ITEM_ID}`}
+                                    redirectLink={`${DOMAIN}/home/item/detail/${item.ITEM_ID}`}
                                 >
                                 </ItemCard>
                                 {/* </div> */}

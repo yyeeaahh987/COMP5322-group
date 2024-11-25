@@ -20,11 +20,14 @@ import { NavBar } from '../navbar/NavBar';
 import { ItemCard } from '../card/ItemCard';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import { ItemDetail } from '../itemDetail/ItemDetail';
-import { postRequestOptions, REACT_APP_DOMAIN, REACT_BACKEND_SERVER } from '../../utils/constant';
+import { postRequestOptions } from '../../utils/constant';
 import { Header } from '../header/Header';
 import { Declare } from '../declare/Declare';
 import './home.css'
 import { logout } from '../login/userSlice';
+
+const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
+const DOMAIN = process.env.REACT_APP_DOMAIN;
 interface IFormInput {
     accountName: string
     accountPasswowrd: string
@@ -89,7 +92,7 @@ export const Home = () => {
                 body: JSON.stringify(body)
             }
             console.log(`requestOption`, requestOption)
-            const response = await fetch(`${REACT_BACKEND_SERVER}/item/uploadImage`, requestOption)
+            const response = await fetch(`${BACKEND_SERVER}/item/uploadImage`, requestOption)
             const result = await response.json()
             console.log(`result`, result)
         };
@@ -131,13 +134,13 @@ export const Home = () => {
 
     function handleIconMenuOnClick(action: string) {
         if (action === "logout") {
-            window.location.href = `${REACT_APP_DOMAIN}`
+            window.location.href = `${DOMAIN}`
             dispatch(logout())
         }
     }
 
     function handleOpenShoppingCart() {
-        window.location.href = `${REACT_APP_DOMAIN}/home/cart`
+        window.location.href = `${DOMAIN}/home/cart`
     }
 
     function handleMouseOver(event: React.MouseEvent<HTMLElement>, index: number) {
@@ -292,7 +295,7 @@ export const Home = () => {
                                         {(subMenu == 1) &&
                                             <>
                                                 <MenuItem onClick={()=>{
-                                                    window.location.href = `${REACT_APP_DOMAIN}/home/overview/嬰幼兒奶粉/奶粉`
+                                                    window.location.href = `${DOMAIN}/home/overview/嬰幼兒奶粉/奶粉`
                                                 }}
                                                 >嬰幼兒奶粉</MenuItem>
                                                 <MenuItem>嬰幼兒尿片</MenuItem>

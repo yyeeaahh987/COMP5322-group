@@ -1,9 +1,10 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
 import type { AppThunk } from "../../app/store"
-import { postRequestOptions, REACT_BACKEND_SERVER } from "../../utils/constant"
+import { postRequestOptions } from "../../utils/constant"
 // import { fetchCount } from "./counterAPI"
-
+const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
+console.log(`BACKEND_SERVER abc`,BACKEND_SERVER)
 export interface UserSliceState {
   // value: number
   status: "idle" | "loading" | "failed"
@@ -63,7 +64,7 @@ export const userSlice = createAppSlice({
         })
       }
 
-      const response = await fetch(`${REACT_BACKEND_SERVER}/user/login`, requestOption)
+      const response = await fetch(`${BACKEND_SERVER}/user/login`, requestOption)
       const result = await response.json()
       console.log(`result`, result)
       return result?.result??false

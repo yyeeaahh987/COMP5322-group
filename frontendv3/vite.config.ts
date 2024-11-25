@@ -8,7 +8,9 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     define: {
-      'process.env.SOME_KEY': JSON.stringify(env.SOME_KEY)
+      'process.env.REACT_APP_ENV': JSON.stringify(env.REACT_APP_ENV),
+      'process.env.REACT_APP_DOMAIN': JSON.stringify(env.REACT_APP_DOMAIN),
+      'process.env.REACT_APP_BACKEND_SERVER': JSON.stringify(env.REACT_APP_BACKEND_SERVER)
     },
     plugins: [react()],
   }

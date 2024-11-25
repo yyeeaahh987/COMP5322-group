@@ -1,10 +1,12 @@
 import { getRequestOptions } from "../constant";
 
-export const REACT_APP_ENV = "dev"
-export const REACT_APP_DOMAIN = "http://localhost:5173"
-export const REACT_BACKEND_SERVER = "http://localhost:8080"
+// export const REACT_APP_ENV = "dev"
+// export const REACT_APP_DOMAIN = "http://localhost:5173"
+// export const REACT_BACKEND_SERVER = "http://localhost:8080"
 
 
+const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
+// console.log(`BACKEND_SERVER item fucntion`,process.env)
 export const postRequestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -20,7 +22,7 @@ export async function getSuggestList() {
     //     })
     //   }
 
-    const response = await fetch(`${REACT_BACKEND_SERVER}/item/getTodaySuggestList`, getRequestOptions)
+    const response = await fetch(`${BACKEND_SERVER}/item/getTodaySuggestList`, getRequestOptions)
     const result = await response.json()
     console.log(`result`, result)
     return result?.result ?? []
@@ -35,7 +37,7 @@ export async function getSubcategoryList(category: string, subcategory: string) 
         })
     }
 
-    const response = await fetch(`${REACT_BACKEND_SERVER}/item/getSubcategoryList`, requestOption)
+    const response = await fetch(`${BACKEND_SERVER}/item/getSubcategoryList`, requestOption)
     const result = await response.json()
     console.log(`result`, result)
     return result?.result ?? []

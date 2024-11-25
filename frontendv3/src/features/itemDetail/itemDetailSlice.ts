@@ -1,9 +1,9 @@
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
 import type { AppThunk } from "../../app/store"
-import { postRequestOptions, REACT_BACKEND_SERVER } from "../../utils/constant"
+import { postRequestOptions } from "../../utils/constant"
 // import { fetchCount } from "./counterAPI"
-
+const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
 export interface ItemDetailSliceState {
   status: "idle" | "loading" | "failed"
   productName: string
@@ -84,7 +84,7 @@ export const itemDetailSlice = createAppSlice({
           })
         }
 
-        const response = await fetch(`${REACT_BACKEND_SERVER}/item/getItemByItemId`, requestOption)
+        const response = await fetch(`${BACKEND_SERVER}/item/getItemByItemId`, requestOption)
         const result = await response.json()
         console.log(`result`, result)
         return result?.result??null

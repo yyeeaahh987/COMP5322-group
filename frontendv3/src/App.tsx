@@ -10,7 +10,6 @@ import {
   selectLoginSuccess
 } from "./features/login/userSlice"
 import { Home } from "./features/home/Home"
-import { REACT_APP_DOMAIN } from "./utils/constant"
 import { ItemCard } from "./features/card/ItemCard"
 import NoMatch from "./pages/NoMatch"
 import { ItemDetail } from "./features/itemDetail/ItemDetail"
@@ -18,7 +17,7 @@ import { Overview } from "./pages/Overview"
 import { Promotion } from "./pages/Promotion"
 import { ShoppingCart } from "./pages/ShoppingCart"
 
-
+const DOMAIN = process.env.REACT_APP_DOMAIN;
 
 
 const App = () => {
@@ -104,7 +103,7 @@ const App = () => {
   useEffect(() => {
     console.log(`loginSuccess`,loginSuccess)
     if(loginSuccess === true){
-      window.location.href = `${REACT_APP_DOMAIN}/home/promotion`
+      window.location.href = `${DOMAIN}/home/promotion`
     }
   }, [loginSuccess])
 

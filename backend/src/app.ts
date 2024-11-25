@@ -20,7 +20,6 @@ const connection = mysql.createConnection({
     password: DATABASE_PASSWORD,
     database: DATABASE_DATABASE
 })
-const httpsPort: number = 8443
 // connection.connect(function(err){
 //     if(!err) {
 //         console.log("Database is connected");
@@ -48,6 +47,7 @@ import itemRouter from "./router/itemRouter";
 
 const app: Application = express()
 const port: number = 8080
+const httpsPort: number = 8443
 // const httpsPort: number = 8443
 app.use(cors({
     origin: '*'

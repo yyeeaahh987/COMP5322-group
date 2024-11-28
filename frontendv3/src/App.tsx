@@ -17,7 +17,7 @@ import { Overview } from "./pages/Overview"
 import { Promotion } from "./pages/Promotion"
 import { ShoppingCart } from "./pages/ShoppingCart"
 import { Register } from "./features/register/Register"
-import { UploadItem } from "./features/upload/uploadItem"
+import { UploadItem } from "./features/upload/UploadItem"
 
 const DOMAIN = process.env.REACT_APP_DOMAIN;
 

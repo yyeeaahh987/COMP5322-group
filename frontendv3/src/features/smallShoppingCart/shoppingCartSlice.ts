@@ -73,7 +73,7 @@ export const shoppingCartSlice = createAppSlice({
         //     state.status = "failed"
         //   },
         // }),
-        addItem: create.reducer((state, action: PayloadAction<any>) => {
+        addItem: create.reducer((state, action: PayloadAction<Item>) => {
             if (state.items.length === 0) {
                 state.items.push({
                     itemId: action.payload.itemId,

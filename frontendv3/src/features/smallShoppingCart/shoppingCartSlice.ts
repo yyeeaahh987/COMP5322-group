@@ -28,7 +28,13 @@ export interface ItemDetailSliceState {
     // language: string
     // used: string
 }
-
+interface Item {
+    itemId: number,
+    engName: string,
+    chiName: string,
+    price: number,
+    amount: number,
+}
 const initialState: ItemDetailSliceState = {
     status: "idle",
     cartId: 0,
@@ -67,7 +73,7 @@ export const shoppingCartSlice = createAppSlice({
         //     state.status = "failed"
         //   },
         // }),
-        addItem: create.reducer((state, action: any) => {
+        addItem: create.reducer((state, action: PayloadAction<any>) => {
             if (state.items.length === 0) {
                 state.items.push({
                     itemId: action.payload.itemId,

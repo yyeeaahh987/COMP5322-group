@@ -81,6 +81,7 @@ export const userSlice = createAppSlice({
           state.loginSuccess = true
         }else{
           state.loginSuccess = false
+          window.alert("Wrong username or password")
         }
       },
       rejected: state => {

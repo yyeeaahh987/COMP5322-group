@@ -52,15 +52,17 @@ router.post('/getUserDetailById', async function (req: Request, res: Response) {
     }
 });
 
-router.post('/createUser', async function (req: Request, res: Response) {
+router.post('/registerNewUser', async function (req: Request, res: Response) {
     console.log(`updateUser`)
     let resultObj = {
         code: 0,
         message: "",
         result: null
     }
-    const { userId,password, email,firstName,lastName,chiName,address,phoneNumber,language, used } = req.body
-    const result = await UserService.createUser(userId,password, email,firstName,lastName,chiName,address,phoneNumber,language, used);
+    // const { userId,password, email,firstName,lastName,chiName,address,phoneNumber,language, used } = req.body
+    // const result = await UserService.createUser(userId,password, email,firstName,lastName,chiName,address,phoneNumber,language, used);
+    const { username,password} = req.body
+    const result = await UserService.createUser(username,password, "","","","","","","", "");
     console.log(`result`, result)
     if (result == ReturnStatusMessage.SUCCESS) {
         resultObj.code = ReturnStatusCode.SUCCESS

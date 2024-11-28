@@ -31,15 +31,28 @@ export async function getItemByItemId(itemId: string) {
     return null;
 }
 
-export async function getTodaySuggestList(){
+export async function getTodaySuggestList() {
     try {
         let sql = `select * from ITEM i,SUGGEST_ITEM si
                     where si.ITEM_ID =i.ITEM_ID 
                     order by si.DISPLAY_ORDER`
         const [rows, fields]: any = await connection.promise().query(sql);
-        console.log(`rows`, rows)
-        let result = rows?rows : null;
-        console.log(`result`, result)
+        // console.log(`rows`, rows)
+        let result = rows ? rows : null;
+        // console.log(`result`, result)
+        if (result != null) {
+            result.forEach((item: any, index: any) => {
+                // Replace the buffer array with base64 data
+                const imgBase64 = item.IMAGE.toString('base64');
+
+                console.log(`imgBase64`, imgBase64)
+                result[index] = {
+                    ...item,
+                    imageBase64: imgBase64
+                }
+            })
+        }
+        console.log(`result`, result[0])
         return result
     } catch (e) {
         console.error(`getTodaySuggestList `, e)
@@ -47,11 +60,11 @@ export async function getTodaySuggestList(){
     return null;
 }
 
-export async function uploadImageByItemId(file:string, itemId:string) {
-    console.log(`itemId`,itemId)
+export async function uploadImageByItemId(file: string, itemId: string) {
+    console.log(`itemId`, itemId)
     try {
         let sql = `UPDATE ITEM SET IMAGE = ? WHERE ITEM_ID = ?`
-        const [rows, fields]: any = await connection.promise().query(sql, [file,itemId]);
+        const [rows, fields]: any = await connection.promise().query(sql, [file, itemId]);
         return null
     } catch (e) {
         console.error(`getItemByItemId `, e)
@@ -59,13 +72,26 @@ export async function uploadImageByItemId(file:string, itemId:string) {
     return null;
 }
 
-export async function getSubcategoryList(category:string, subcategory:string){
+export async function getSubcategoryList(category: string, subcategory: string) {
     try {
         let sql = `select * from ITEM where CATEGORY = ? and SUB_CATEGORY = ?`
-        const [rows, fields]: any = await connection.promise().query(sql, [category,subcategory]);
-        console.log(`rows`, rows)
-        let result = rows?rows : null;
-        console.log(`result`, result)
+        const [rows, fields]: any = await connection.promise().query(sql, [category, subcategory]);
+       // console.log(`rows`, rows)
+        let result = rows ? rows : null;
+      //  console.log(`result`, result)
+        // if (result != null) {
+        //     result.forEach((item: any, index: any) => {
+        //         // Replace the buffer array with base64 data
+        //         const imgBase64 = item.IMAGE.toString('base64');
+
+        //         console.log(`imgBase64`, imgBase64)
+        //         result[index] = {
+        //             ...item,
+        //             imageBase64: imgBase64
+        //         }
+        //     })
+        // }
+        console.log(`result`, result[0])
         return result
     } catch (e) {
         console.error(`getSubcategoryList `, e)
@@ -88,7 +114,7 @@ export async function createItem(category: string, subCategory: string, brand: s
     return ReturnStatusMessage.FAIL
 }
 
-export async function updateItem(itemId:string,category: string, subCategory: string, brand: string, image: string, engName: string, chiName: string, price: string, description: string, origin: string, srchName: string, discount: string, rating: string, used: string) {
+export async function updateItem(itemId: string, category: string, subCategory: string, brand: string, image: string, engName: string, chiName: string, price: string, description: string, origin: string, srchName: string, discount: string, rating: string, used: string) {
     // let srchName = engName;
     try {
         let sql = `update ITEM set         

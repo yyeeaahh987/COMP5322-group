@@ -4,29 +4,21 @@ import styles from "./Login.module.css"
 import Grid from '@mui/material/Grid2';
 import { Box, Button, Input, TextField } from "@mui/material"
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {
-    validateLogin
-} from "./userSlice"
+// import {
+//     validateLogin
+// } from "./userSlice"
 import { Header } from "../header/Header";
 import { Declare } from "../declare/Declare";
-const DOMAIN = process.env.REACT_APP_DOMAIN;
+import { registerNewUser } from "../../utils/loginFunction/loginFunction";
 
-// enum GenderEnum {
-//     female = "female",
-//     male = "male",
-//     other = "other",
-// }
-// interface IFormInput {
-//     firstName: string
-//     gender: GenderEnum
-//   }
+const DOMAIN = process.env.REACT_APP_DOMAIN;
 
 interface IFormInput {
     loginAccountName: string
     loginAccountPasswowrd: string
 }
 
-export const Login = () => {
+export const Register = () => {
     const dispatch = useAppDispatch()
     //   const count = useAppSelector(selectCount)
     //   const status = useAppSelector(selectStatus)
@@ -45,9 +37,17 @@ export const Login = () => {
             loginAccountPasswowrd: "",
         }
     });
-    const onSubmit: SubmitHandler<any> = (data) => {
+    const onSubmit: SubmitHandler<any> = async (data) => {
         console.log(data)
-        dispatch(validateLogin(data))
+        let result = await registerNewUser(data.loginAccountName, data.loginAccountPasswowrd)
+        console.log(`result`, result)
+        if (result) {
+            window.alert("success")
+            window.location.href = `${DOMAIN}`
+        } else {
+            window.alert("fail to register")
+        }
+        // dispatch(validateLogin(data))
     }
 
     function handleReset() {
@@ -56,23 +56,18 @@ export const Login = () => {
             loginAccountPasswowrd: "",
         })
     }
-
-    function handleRegister(){
-        window.location.href = `${DOMAIN}/register`
-    }
-
     return (
         <>
             <Header></Header>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container>
                     <Grid size={12}>
-                        <h2>仲未係會員?​ 快啲加入, 有好多優惠等緊你！</h2>
+                        <h2>註冊</h2>
                     </Grid>
                     <Grid size={6} justifyContent={"center"}>
                         <Box className={"sign-in-box"}>
                             <Grid size={12}>
-                                登入
+                                註冊
                             </Grid>
                             <Grid size={12}>
                                 帳戶
@@ -95,23 +90,8 @@ export const Login = () => {
                                 />
                             </Grid>
                         </Box>
-                        <Button className="submit-button" variant="outlined" type="submit">登入</Button>
+                        <Button className="submit-button" variant="outlined" type="submit">註冊</Button>
                         <Button className="clear-button" variant="outlined" onClick={handleReset}>清取</Button>
-                    </Grid>
-
-                    <Grid size={6} justifyContent={"center"}>
-                        <Box className={"sign-in-box"}>
-                            <Grid size={12}>
-                                <Button className="submit-button" variant="outlined" onClick={handleRegister}>註冊</Button>
-                            </Grid>
-                        </Box>
-                    </Grid>
-
-                    <Grid size={6}>
-
-                    </Grid>
-                    <Grid size={6}>
-
                     </Grid>
                 </Grid>
             </form>

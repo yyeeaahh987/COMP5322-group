@@ -85,6 +85,10 @@ this part for port forwading in ec2 to allow verify ssl cert
 //     res.send(sslCert)
 // })
 
+app.get("/hi", (req: Request, res: Response) => {
+    res.send("hi")
+})
+
 app.get("/toto", (req: Request, res: Response) => {
     
 
@@ -133,12 +137,12 @@ app.listen(port, function () {
 })
 
 // const sslCert = fs.readFileSync(`${__dirname}/B5A96CBA293C33D986D193CA56347609.txt`)
-// const key = fs.readFileSync(`/etc/letsencrypt/live/api.loanshark.tech/privkey.pem`)
-// const cert = fs.readFileSync(`/etc/letsencrypt/live/api.loanshark.tech/fullchain.pem`)
+const key = fs.readFileSync(`/etc/letsencrypt/live/comp5322foru.agency/privkey.pem`)
+const cert = fs.readFileSync(`/etc/letsencrypt/live/comp5322foru.agency/fullchain.pem`)
 
 const cred = {
-    // key,
-    // cert
+    key,
+    cert
 }
 
 const httpsServer = https.createServer(cred, app)

@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Route, Routes, useParams } from 'react-router-dom';
 import itemImage from "../../../img/item/001/big_1.jpg"
 import './Overview.css'
-import { TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { getSubcategoryList, getSuggestList } from '../utils/itemFunction/itemFunction';
 import { ItemCard } from '../features/card/ItemCard';
 // import {
@@ -27,6 +27,17 @@ interface IFormInput {
     accountName: string
     accountPasswowrd: string
 }
+
+const blobToBase64 = (blob: any) => {
+    console.log(`blob`, blob)
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    return new Promise(resolve => {
+        reader.onloadend = () => {
+            resolve(reader.result);
+        };
+    });
+};
 
 export const Overview = () => {
     let { itemId } = useParams();
@@ -47,78 +58,61 @@ export const Overview = () => {
         (async () => {
             let list = await getSubcategoryList(category ? category : "", subcategory ? subcategory : "")
             console.log(`list`, list)
+            // list.forEach((item:any,index:any)=>{
+            //     console.log(`item.IMAGE`,item.IMAGE)
+
+            //     const base64String = item.IMAGE.toString('base64');
+            //     console.log(`base64String`,base64String)
+
+            //     const image = new Blob([item.IMAGE], { type: 'image/jpeg' });
+            //     console.log(`imageUrl`,image)
+            //     const imageUrl = URL.createObjectURL(image);
+            //     console.log(`imageUrl`,imageUrl)
+            //     // blobToBase64(item.IMAGE).then(res => {
+            //     //     // do what you wanna do
+            //     //     console.log(res); // res is base64 now
+            //         item={
+            //             ...item,
+            //             imageBase64:base64String
+            //         }
+            //     //   });                  
+            // })
+            console.log(`list`, list)
             setProductList(list)
         })
             ()
     }, [])
 
-
-    // useEffect(async ()=>{
-
-    //     console.log(`itemId`,itemId)
-    //     // await 
-    //     dispatch( getItemByItemId("123"))
-    //     //  getItemByItemId
-    // },[])
-
-    // function getSuggestList(){
-    //     let list = [
-    //         {
-
-    //         },
-    //         {
-
-    //         },
-    //     ]
-    // }
-    // function handleClickMinus() {
-
-    //     console.log(`pendingPurchaseAmt`, pendingPurchaseAmt)
-    //     if (pendingPurchaseAmt <= 0) {
-    //         return
-    //     }
-    //     let amt = pendingPurchaseAmt
-    //     amt = amt - 1;
-    //     setPendingPurchaseAmt(amt);
-    // }
-
-    // function handleClickPlus() {
-    //     console.log(`pendingPurchaseAmt`, pendingPurchaseAmt)
-    //     let amt = pendingPurchaseAmt
-    //     amt = amt + 1;
-    //     setPendingPurchaseAmt(amt);
-    // }
-
-    // function handleAddCart() {
-
-    // }
-
     return (
         <>
             <Grid container>
+                <Grid size={12}>
+                    <div style={{ padding: '5px' }}></div>
+                </Grid>
 
                 {/* <span>overview</span> */}
                 {
                     productList.map((item: any, index: number) => {
                         return (
                             <Grid size={2} key={index}>
-                                {/* <div > */}
-                                {/* <img src={item.IMAGE}></img> */}
-                                <ItemCard
-                                    imagePath={item.IMAGE}
-                                    altImage={"a"}
-                                    itemDesc={`${item?.ENG_NAME ?? ""} ${item?.CHI_NAME ?? ""}`}
-                                    price={item.PRICE}
-                                    addCartDisabled={((item?.AMOUNT ?? 0) > 0) ? false : true}
-                                    redirectLink={`${DOMAIN}/home/item/detail/${item.ITEM_ID}`}
-                                >
-                                </ItemCard>
-                                {/* </div> */}
+                                <Box className="card">
+                                    <ItemCard
+                                        imagePath={item.ITEM_ID}
+                                        altImage={"a"}
+                                        itemDesc={`${item?.ENG_NAME ?? ""} ${item?.CHI_NAME ?? ""}`}
+                                        price={item.PRICE}
+                                        addCartDisabled={((item?.AMOUNT ?? 0) > 0) ? false : true}
+                                        redirectLink={`${DOMAIN}/home/item/detail/${item.ITEM_ID}`}
+                                    >
+                                    </ItemCard>
+                                </Box>
                             </Grid>
                         )
                     })
                 }
-
+                <Grid size={12}>
+                    <div style={{ padding: '5px' }}></div>
+                </Grid>
             </Grid>
         </>
     )

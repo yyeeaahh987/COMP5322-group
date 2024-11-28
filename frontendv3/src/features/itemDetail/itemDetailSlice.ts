@@ -7,6 +7,9 @@ const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
 export interface ItemDetailSliceState {
   status: "idle" | "loading" | "failed"
   productName: string
+  productEngName: string
+  productChiName: string
+  productId:number
   productUnit: string
   productImage:string
   inStock: boolean
@@ -24,7 +27,10 @@ export interface ItemDetailSliceState {
 
 const initialState: ItemDetailSliceState = {
   status: "idle",
+  productId:0,
   productName: "",
+  productEngName: "",
+  productChiName: "",
   productImage:"",
   productUnit: "0g",
   inStock: false,
@@ -97,7 +103,10 @@ export const itemDetailSlice = createAppSlice({
           console.log(`action`,action)
           state.status = "idle"
           if(action.payload !== null){
+            state.productId = action.payload.ITEM_ID
             state.productName= action.payload.ENG_NAME + action.payload.CHI_NAME
+            state.productEngName= action.payload.ENG_NAME,
+            state.productChiName= action.payload.CHI_NAME,
             state.productImage= action.payload.IMAGE
             state.productUnit= action.payload.UNIT
             if((action?.payload?.AMOUNT??0) >0){
@@ -122,7 +131,10 @@ export const itemDetailSlice = createAppSlice({
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
   selectors: {
+    selectProductId: data => data.productId,
     selectProductName: data => data.productName,
+    selectProductEngName: data => data.productEngName,
+    selectProductChiName: data => data.productChiName,
     selectProductImage: data => data.productImage,
     selectProductUnit: data => data.productUnit,
     selectInStock: data => data.inStock,
@@ -145,7 +157,10 @@ export const { getItemByItemId } =
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
 export const {
+  selectProductId,
   selectProductName,
+  selectProductEngName,
+  selectProductChiName,
   selectProductImage,
   selectProductUnit,
   selectInStock,

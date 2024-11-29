@@ -27,7 +27,7 @@ export const ItemCard = ((props:ItemCardProps) => {
                 <CardMedia
                     component="img"
                     height="194"
-                    image={`/img/item/1/itemCard.jpg`}
+                    image={`/img/item/${props.imagePath}/itemCard.jpg`}
                     alt={props.altImage}
                     onClick={handleClickItem}
                 />

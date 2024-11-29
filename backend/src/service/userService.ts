@@ -15,7 +15,7 @@ const connection = mysql.createPool({
     password: DATABASE_PASSWORD,
     database: DATABASE_DATABASE
 })
-
+    
 export async function validateAccountLogin(name:string, password:string) {
     try {
         let sql = `select count(*) as count from USER WHERE user_id = ? and PASSWORD = ?`

@@ -21,14 +21,13 @@ export const ItemCard = ((props:ItemCardProps) => {
         window.location.href = `${props.redirectLink}`
     }
     
-    console.log(`linke`,`../../../img/item/${props.imagePath}/itemCard.jpg`)
     return (
         <>
             <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                     component="img"
                     height="194"
-                    image={`../../../img/item/${props.imagePath}/itemCard.jpg`}
+                    image={`/img/item/1/itemCard.jpg`}
                     alt={props.altImage}
                     onClick={handleClickItem}
                 />

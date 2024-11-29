@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { NavBar } from '../navbar/NavBar';
 import { ItemCard } from '../card/ItemCard';
 import { Route, Routes, useParams } from 'react-router-dom';
-import itemImage from "../../../img/item/001/big_1.jpg"
 import './ItemDetail.css'
 import { Box, Button, IconButton, TextField } from '@mui/material';
 import {
@@ -130,7 +129,7 @@ export const ItemDetail = () => {
             <Grid container>
                 <Grid size={6}>
                     <Box className="product-box">
-                        <img className='image-cust' src={`../../../img/item/${productId}/itemCard.jpg`}></img>
+                        <img className='image-cust' src={`/img/item/${productId}/itemCard.jpg`}></img>
                     </Box>
 
                     {/* <span>this is photo area</span> */}

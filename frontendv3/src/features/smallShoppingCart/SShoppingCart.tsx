@@ -67,7 +67,7 @@ export const SShoppingCart = () => {
                             <Grid size={12}>
                                 <Grid container>
                                     <Grid size={4}>
-                                        <img className="product-img" src={`../../../img/item/${eachProduct.itemId}/itemCard.jpg`}></img>
+                                        <img className="product-img" src={`/img/item/${eachProduct.itemId}/itemCard.jpg`}></img>
                                     </Grid>
                                     <Grid size={8}>
                                         <Grid size={12}>

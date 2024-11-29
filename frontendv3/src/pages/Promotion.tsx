@@ -6,16 +6,15 @@ import AddIcon from '@mui/icons-material/Add';
 // import { NavBar } from '../navbar/NavBar';
 // import { ItemCard } from '../card/ItemCard';
 import { Route, Routes, useParams } from 'react-router-dom';
-import itemImage from "../../../img/item/001/big_1.jpg"
 import './Overview.css'
 import { TextField } from '@mui/material';
 import { getSuggestList } from '../utils/itemFunction/itemFunction';
 import { ItemCard } from '../features/card/ItemCard';
-import img001 from '../../img/promotionBanner/001.jpg'
-import img002 from '../../img/promotionBanner/002.jpg'
-import img003 from '../../img/promotionBanner/003.jpg'
-import img004 from '../../img/promotionBanner/004.jpg'
-import img005 from '../../img/promotionBanner/005.jpg'
+import img001 from '/img/promotionBanner/001.jpg'
+import img002 from '/img/promotionBanner/002.jpg'
+import img003 from '/img/promotionBanner/003.jpg'
+import img004 from '/img/promotionBanner/004.jpg'
+import img005 from '/img/promotionBanner/005.jpg'
 
 
 // import {

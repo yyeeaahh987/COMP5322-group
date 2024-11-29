@@ -2,11 +2,7 @@ import { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-// import { useAppDispatch, useAppSelector } from '../../app/hooks';
-// import { NavBar } from '../navbar/NavBar';
-// import { ItemCard } from '../card/ItemCard';
 import { Route, Routes, useParams } from 'react-router-dom';
-import itemImage from "../../../img/item/001/big_1.jpg"
 import './Overview.css'
 import { Box, TextField } from '@mui/material';
 import { getSubcategoryList, getSuggestList } from '../utils/itemFunction/itemFunction';

@@ -20,9 +20,7 @@ export async function validateAccountLogin(name:string, password:string) {
     try {
         let sql = `select count(*) as count from USER WHERE user_id = ? and PASSWORD = ?`
         const [rows, fields]: any = await connection.promise().query(sql, [name,password]);
-        console.log(`rows`, rows)
         let result = rows?.[0]?.count ?? 0;
-        console.log(`result`, result)
         if(result ===0){
             return false;
         }else{
@@ -37,9 +35,7 @@ export async function getUserDetailById(userId: string) {
     try {
         let sql = `select * from USER WHERE user_id = ? and used ='1'`
         const [rows, fields]: any = await connection.promise().query(sql, [userId]);
-        console.log(`rows`, rows)
         let result = rows?.[0] ?? null;
-        console.log(`result`, result)
         return result
     } catch (e) {
 
@@ -54,7 +50,6 @@ export async function createUser(userId: string, password: string, email: string
         const [{ insertId }]: any = await connection.promise().query(sql,
             [userId, password, email, firstName, lastName, chiName, address, "admin", moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), "admin", moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), phoneNumber, language,used]
         );
-        console.log(`insertId`, insertId)
         return ReturnStatusMessage.SUCCESS
     } catch (e) {
         console.log(`createUser error`, e)
@@ -79,7 +74,6 @@ export async function updateUser(userId: string, email: string, firstName: strin
         const [{ updateId }]: any = await connection.promise().query(sql,
             [email, firstName, lastName, chiName, address, "admin", moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), phoneNumber, language, used, userId]
         );
-        console.log(`update`, updateId)
         return ReturnStatusMessage.SUCCESS
     } catch (e) {
         console.log(`createUser error`, e)

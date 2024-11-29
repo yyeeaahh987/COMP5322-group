@@ -13,7 +13,6 @@ router.post('/getItemByItemId', async function (req: Request, res: Response) {
     }
     const { itemId } = req.body
     const result = await ItemService.getItemByItemId(itemId);
-    console.log(`result`, result)
     if (result == null) {
         resultObj.code = ReturnStatusCode.NO_DATA_FOUND
         resultObj.message = "no data found"
@@ -34,7 +33,6 @@ router.get('/getTodaySuggestList', async function (req: Request, res: Response) 
         result: null
     }
     const result = await ItemService.getTodaySuggestList();
-    console.log(`result`, result)
     if (result == null) {
         resultObj.code = ReturnStatusCode.NO_DATA_FOUND
         resultObj.message = "no data found"
@@ -69,7 +67,7 @@ router.post('/uploadImage', async function (req: Request, res: Response) {
 });
 
 router.post('/getSubcategoryList', async function (req: Request, res: Response) {
-    // console.log(`sendEmail`,req.body)
+    console.log(`getSubcategoryList`)
     let resultObj = {
         code: 0,
         message: "",
@@ -77,7 +75,6 @@ router.post('/getSubcategoryList', async function (req: Request, res: Response) 
     }
     const { category, subcategory } = req.body
     const result = await ItemService.getSubcategoryList(category, subcategory);
-    console.log(`result`, result)
     if (result == null) {
         resultObj.code = ReturnStatusCode.NO_DATA_FOUND
         resultObj.message = "no data found"

@@ -20,7 +20,6 @@ export async function queryToDb(sql: string) {
     try{
         const [rows, fields]:any = await connection.promise().query(sql);
         // const rows =  await connection.promise().query(sql);
-        console.log(`rows`,rows)
         result= rows
     }catch(e:any){
 

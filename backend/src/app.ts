@@ -51,7 +51,7 @@ app.get("/toto", (req: Request, res: Response) => {
         if (err) {
             throw err
         }
-        console.log('The solution is: ', rows)
+        // console.log('The solution is: ', rows)
     })
 
     connection.end()

@@ -21,9 +21,7 @@ export async function getItemByItemId(itemId: string) {
     try {
         let sql = `select * from ITEM where ITEM_ID = ?`
         const [rows, fields]: any = await connection.promise().query(sql, [itemId]);
-        console.log(`rows`, rows)
         let result = rows?.[0] ?? null;
-        console.log(`result`, result)
         return result
     } catch (e) {
         console.error(`getItemByItemId `, e)
@@ -52,7 +50,6 @@ export async function getTodaySuggestList() {
                 }
             })
         }
-        console.log(`result`, result[0])
         return result
     } catch (e) {
         console.error(`getTodaySuggestList `, e)
@@ -61,7 +58,6 @@ export async function getTodaySuggestList() {
 }
 
 export async function uploadImageByItemId(file: string, itemId: string) {
-    console.log(`itemId`, itemId)
     try {
         let sql = `UPDATE ITEM SET IMAGE = ? WHERE ITEM_ID = ?`
         const [rows, fields]: any = await connection.promise().query(sql, [file, itemId]);
@@ -91,7 +87,6 @@ export async function getSubcategoryList(category: string, subcategory: string) 
         //         }
         //     })
         // }
-        console.log(`result`, result[0])
         return result
     } catch (e) {
         console.error(`getSubcategoryList `, e)
@@ -106,7 +101,6 @@ export async function createItem(category: string, subCategory: string, brand: s
         const [{ insertId }]: any = await connection.promise().query(sql,
             [null, category, subCategory, brand, image, engName, chiName, price, description, origin, srchName, discount, rating, "admin", itemService.getNow(), used, "admin", itemService.getNow()]
         );
-        console.log(`insertId`, insertId)
         return ReturnStatusMessage.SUCCESS
     } catch (e) {
         console.log(`createUser error`, e)
@@ -137,7 +131,6 @@ export async function updateItem(itemId: string, category: string, subCategory: 
         const [{ updateId }]: any = await connection.promise().query(sql,
             [category, subCategory, brand, image, engName, chiName, price, description, origin, srchName, discount, rating, "admin", itemService.getNow(), used, itemId]
         );
-        console.log(`update`, updateId)
         return ReturnStatusMessage.SUCCESS
     } catch (e) {
         console.log(`createUser error`, e)
@@ -155,7 +148,6 @@ export async function deleteItem(used: string, itemId: string) {
         const [{ updateId }]: any = await connection.promise().query(sql,
             ["0", "admin", itemService.getNow(), itemId]
         );
-        console.log(`update`, updateId)
         return ReturnStatusMessage.SUCCESS
     } catch (e) {
         console.log(`createUser error`, e)

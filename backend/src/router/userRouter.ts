@@ -5,17 +5,14 @@ import {ReturnStatusCode , ReturnStatusMessage} from '../enum/enum'
 const router = express.Router();
 
 router.post('/login', async function (req: Request, res: Response) {
-    // console.log(`sendEmail`,req.body)
+    console.log(`login`)
     let resultObj = {
         code: 0,
         message: "",
         result: false
     }
-    console.log(`req.body`,req.body)
     const { name, password } = req.body
-    console.log(`userId`,name, password)
     const result = await UserService.validateAccountLogin(name, password);
-    console.log(`result`, result)
     if (result == null) {
         resultObj.code = ReturnStatusCode.NO_DATA_FOUND
         resultObj.message = "no data found"
@@ -29,17 +26,14 @@ router.post('/login', async function (req: Request, res: Response) {
 });
 
 router.post('/getUserDetailById', async function (req: Request, res: Response) {
-    // console.log(`sendEmail`,req.body)
+    console.log(`getUserDetailById`)
     let resultObj = {
         code: 0,
         message: "",
         result: null
     }
-    console.log(`req.body`,req.body)
     const { userId } = req.body
-    console.log(`userId`,userId)
     const result = await UserService.getUserDetailById(userId);
-    console.log(`result`, result)
     if (result == null) {
         resultObj.code = ReturnStatusCode.NO_DATA_FOUND
         resultObj.message = "no data found"
@@ -63,7 +57,6 @@ router.post('/registerNewUser', async function (req: Request, res: Response) {
     // const result = await UserService.createUser(userId,password, email,firstName,lastName,chiName,address,phoneNumber,language, used);
     const { username,password} = req.body
     const result = await UserService.createUser(username,password, "","","","","","","", "");
-    console.log(`result`, result)
     if (result == ReturnStatusMessage.SUCCESS) {
         resultObj.code = ReturnStatusCode.SUCCESS
         resultObj.message = "success"
@@ -84,7 +77,6 @@ router.post('/updateUser', async function (req: Request, res: Response) {
     }
     const { userId, email,firstName,lastName,chiName,address,phoneNumber,language, used } = req.body
     const result = await UserService.updateUser(userId, email,firstName,lastName,chiName,address,phoneNumber,language, used);
-    console.log(`result`, result)
     if (result == ReturnStatusMessage.SUCCESS) {
         resultObj.code = ReturnStatusCode.SUCCESS
         resultObj.message = "success"

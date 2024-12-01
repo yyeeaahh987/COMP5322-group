@@ -9,6 +9,11 @@ export enum ReturnStatusMessage {
     'FAIL'
 }
 
+export interface ReturnObj {
+    code: number
+    message: string
+    result: any
+}
 // export enum HttpStatusCode{
 //     '200',
 //     '404',

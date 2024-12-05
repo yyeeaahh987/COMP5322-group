@@ -6,6 +6,7 @@ import { quotesApiSlice } from "../features/quotes/quotesApiSlice"
 import { userSlice } from "../features/login/userSlice"
 import { itemDetailSlice } from "../features/itemDetail/itemDetailSlice"
 import { shoppingCartSlice } from "../features/smallShoppingCart/shoppingCartSlice"
+import { orderSlice } from "../features/order/orderSlice"
 // `combineSlices` automatically combines the reducers using
 // their `reducerPath`s, therefore we no longer need to call `combineReducers`.
 const rootReducer = combineSlices(
@@ -13,7 +14,8 @@ const rootReducer = combineSlices(
   quotesApiSlice,
   userSlice,
   itemDetailSlice,
-  shoppingCartSlice
+  shoppingCartSlice,
+  orderSlice
 )
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>

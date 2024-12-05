@@ -35,15 +35,11 @@ export async function getTodaySuggestList() {
                     where si.ITEM_ID =i.ITEM_ID 
                     order by si.DISPLAY_ORDER`
         const [rows, fields]: any = await connection.promise().query(sql);
-        // console.log(`rows`, rows)
         let result = rows ? rows : null;
-        // console.log(`result`, result)
         if (result != null) {
             result.forEach((item: any, index: any) => {
                 // Replace the buffer array with base64 data
                 const imgBase64 = item.IMAGE.toString('base64');
-
-                console.log(`imgBase64`, imgBase64)
                 result[index] = {
                     ...item,
                     imageBase64: imgBase64
@@ -72,21 +68,7 @@ export async function getSubcategoryList(category: string, subcategory: string) 
     try {
         let sql = `select * from ITEM where CATEGORY = ? and SUB_CATEGORY = ?`
         const [rows, fields]: any = await connection.promise().query(sql, [category, subcategory]);
-       // console.log(`rows`, rows)
         let result = rows ? rows : null;
-      //  console.log(`result`, result)
-        // if (result != null) {
-        //     result.forEach((item: any, index: any) => {
-        //         // Replace the buffer array with base64 data
-        //         const imgBase64 = item.IMAGE.toString('base64');
-
-        //         console.log(`imgBase64`, imgBase64)
-        //         result[index] = {
-        //             ...item,
-        //             imageBase64: imgBase64
-        //         }
-        //     })
-        // }
         return result
     } catch (e) {
         console.error(`getSubcategoryList `, e)

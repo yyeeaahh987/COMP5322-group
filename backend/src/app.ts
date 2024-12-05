@@ -25,6 +25,7 @@ const connection = mysql.createConnection({
 import userRouter from './router/userRouter';
 import itemRouter from "./router/itemRouter";
 import cartRouter from "./router/cartRouter";
+import orderRouter from "./router/orderRouter";
 
 const app: Application = express()
 const port: number = 8080
@@ -40,7 +41,7 @@ app.use(bodyParser.urlencoded({ limit: '5000mb', extended: true }))
 app.use('/user', userRouter);
 app.use('/item', itemRouter);
 app.use('/cart', cartRouter);
-
+app.use('/order', orderRouter);
 
 app.get("/hi", (req: Request, res: Response) => {
     res.send("hi")

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import { Card, CardActions, CardContent, CardMedia, Collapse, styled } from '@mui/material';
 import './ItemCard.css'
+import { useNavigate } from 'react-router-dom';
 interface ItemCardProps {
     imagePath: string;
     altImage:string;
@@ -12,13 +13,13 @@ interface ItemCardProps {
 }
 
 export const ItemCard = ((props:ItemCardProps) => {
+    const navigate = useNavigate();
     const [expanded, setExpanded] = useState(false);
 
 
     const handleClickItem = ()=>{
         console.log(`handleClickItem`)
-        // console.log(`${REACT_APP_DOMAIN}/home`)
-        window.location.href = `${props.redirectLink}`
+        navigate(props.redirectLink);
     }
     
     return (

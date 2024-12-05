@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { createBrowserRouter, Route, RouterProvider, Routes } from "react-router-dom"
+import { createBrowserRouter, Route, RouterProvider, Routes, useLocation, useNavigate } from "react-router-dom"
 import "./App.css"
 import { Counter } from "./features/counter/Counter"
 import { Quotes } from "./features/quotes/Quotes"
@@ -7,7 +7,8 @@ import logo from "./logo.svg"
 import { Login } from "./features/login/Login"
 import { useAppDispatch, useAppSelector } from "./app/hooks"
 import {
-  selectLoginSuccess
+  selectLoginSuccess,
+  selectUserName
 } from "./features/login/userSlice"
 import { Home } from "./features/home/Home"
 import { ItemCard } from "./features/card/ItemCard"
@@ -18,14 +19,19 @@ import { Promotion } from "./pages/Promotion"
 import { ShoppingCart } from "./pages/ShoppingCart"
 import { Register } from "./features/register/Register"
 import { UploadItem } from "./features/upload/UploadItem"
+import { getCartByUserId } from "./features/smallShoppingCart/shoppingCartSlice"
+import { Order } from "./pages/Order"
 
 const DOMAIN = process.env.REACT_APP_DOMAIN;
 
 
 const App = () => {
-
-  const dispatch = useAppDispatch()
-  const loginSuccess = useAppSelector(selectLoginSuccess)
+  // const navigate = useNavigate();
+  // const location = useLocation();
+   
+  // const dispatch = useAppDispatch()
+  // const loginSuccess = useAppSelector(selectLoginSuccess)
+  // const userName = useAppSelector(selectUserName)
   
   const router = createBrowserRouter([
     {
@@ -53,6 +59,10 @@ const App = () => {
         {
           path: "cart",
           element: <ShoppingCart></ShoppingCart>,
+        },
+        {
+          path: "order",
+          element: <Order></Order>,
         },
         {
           path: "item/detail/:itemId",
@@ -110,21 +120,21 @@ const App = () => {
     }
   ]);
 
-  useEffect(() => {
-    console.log(`loginSuccess`,loginSuccess)
-    if(loginSuccess === true){
-      window.location.href = `${DOMAIN}/home/promotion`
-    }
-  }, [loginSuccess])
+  // useEffect(() => {
+  //   console.log(`loginSuccess`,loginSuccess)
+  //   if(loginSuccess === true){
+  //     dispatch(getCartByUserId(userName))
+  //     // window.location.href = `${DOMAIN}/home/promotion`
+  //     // (`${DOMAIN}/home/promotion`);
+  //     location(`${DOMAIN}/home/promotion`);
+
+  //   }
+  // }, [loginSuccess])
 
   return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
 }
 
 export default App
-
-
-
-
 
 
 

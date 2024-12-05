@@ -2,9 +2,10 @@ import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
 import type { AppThunk } from "../../app/store"
 import { postRequestOptions } from "../../utils/constant"
+import { ItemDetailSliceState, shoppingCartSlice } from "../smallShoppingCart/shoppingCartSlice";
 // import { fetchCount } from "./counterAPI"
 const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
-console.log(`BACKEND_SERVER abc`,BACKEND_SERVER)
+console.log(`BACKEND_SERVER abc`, BACKEND_SERVER)
 export interface UserSliceState {
   // value: number
   status: "idle" | "loading" | "failed"
@@ -22,11 +23,11 @@ export interface UserSliceState {
   lastUpdatedDate: string
   phoneNumber: string
   language: string
-  used:string
+  used: string
 }
 
 const initialState: UserSliceState = {
-  status:"idle",
+  status: "idle",
   loginSuccess: false,
   userName: "",
   password: "",
@@ -41,7 +42,7 @@ const initialState: UserSliceState = {
   lastUpdatedDate: "",
   phoneNumber: "",
   language: "",
-  used:"",
+  used: "",
 }
 
 // If you are not using async thunks you can use the standalone `createSlice`.
@@ -51,35 +52,71 @@ export const userSlice = createAppSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: create => ({
-    login:create.reducer(state =>{
+    login: create.reducer(state => {
 
     }),
-    validateLogin:create.asyncThunk(async(data:any) =>{
-      console.log(`async`, data)
-      let requestOption ={
+    validateLogin: create.asyncThunk(async (data: any) => {
+      let returnObj ={}
+      let requestOption = {
         ...postRequestOptions,
-        body: JSON.stringify({ 
-          name:data.loginAccountName,
-          password:data.loginAccountPasswowrd
+        body: JSON.stringify({
+          name: data.loginAccountName,
+          password: data.loginAccountPasswowrd
         })
       }
 
       const response = await fetch(`${BACKEND_SERVER}/user/login`, requestOption)
       const result = await response.json()
       console.log(`result`, result)
-      return result?.result??false
+      // let loginResult = result?.result ?? false
+      returnObj={
+        result :result?.result ?? false,
+        userName: data.loginAccountName,
+      }
+      return returnObj
+
+      // returnObj.loginResult = loginResult
+      // if (loginResult === true) {
+      //   //get user profile
+      //   requestOption = {
+      //     ...postRequestOptions,
+      //     body: JSON.stringify({
+      //       userId: data.loginAccountName,
+      //     })
+      //   }
+      //   const userProfileResponse = await fetch(`${BACKEND_SERVER}/user/getUserDetailById`, requestOption)
+      //   const userProfileResult = await userProfileResponse.json()
+      //   console.log(`userProfileResult`,userProfileResult)
+      //   returnObj.userInfo = userProfileResult.result
+      //   //get cart info
+      //   requestOption = {
+      //     ...postRequestOptions,
+      //     body: JSON.stringify({
+      //       userId: data.loginAccountName,
+      //     })
+      //   }
+      //   const cartResponse = await fetch(`${BACKEND_SERVER}/cart/getCartByUserId`, requestOption)
+      //   const cartResult = await cartResponse.json()
+      //   console.log(`cartResult`,cartResult)
+      //   returnObj.cartInfo = cartResult.result
+      // }
+
+      // return returnObj
 
 
-    },{
+    }, {
       pending: state => {
         state.status = "loading"
       },
-      fulfilled: (state, action) => {
+      fulfilled: (state, action:any) => {
+        console.log(`state`,state)
+        console.log(`action`,action)
         state.status = "idle"
-        console.log(`action`,action.payload)
-        if(action.payload ==true){
+        console.log(`action`, action.payload)
+        if (action.payload.result == true) {
           state.loginSuccess = true
-        }else{
+          state.userName = action.payload.userName
+        } else {
           state.loginSuccess = false
           window.alert("Wrong username or password")
         }
@@ -88,7 +125,7 @@ export const userSlice = createAppSlice({
         state.status = "failed"
       },
     }),
-    logout:create.reducer(state =>{
+    logout: create.reducer(state => {
       state = initialState
     }),
     // increment: create.reducer(state => {
@@ -152,17 +189,17 @@ export const userSlice = createAppSlice({
     selectLastUpdatedDate: data => data.lastUpdatedDate,
     selectPhoneNumber: data => data.phoneNumber,
     selectLanguage: data => data.language,
-    selectUsed:data => data.used,
+    selectUsed: data => data.used,
 
   },
 })
 
 // Action creators are generated for each case reducer function.
-export const {  login, validateLogin, logout } =
+export const { login, validateLogin, logout } =
   userSlice.actions
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
-export const { 
+export const {
   selectLoginSuccess,
   selectUserName,
   selectPassword,
@@ -178,7 +215,7 @@ export const {
   selectPhoneNumber,
   selectLanguage,
   selectUsed
- } = userSlice.selectors
+} = userSlice.selectors
 
 // // We can also write thunks by hand, which may contain both sync and async logic.
 // // Here's an example of conditionally dispatching actions based on current state.

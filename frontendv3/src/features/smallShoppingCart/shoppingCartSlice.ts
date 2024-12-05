@@ -48,83 +48,120 @@ export const shoppingCartSlice = createAppSlice({
     initialState,
     // The `reducers` field lets us define reducers and generate associated actions
     reducers: create => ({
-        // login: create.reducer(state => {
-
-        // }),
-        // validateLogin: create.asyncThunk(async (data: any) => {
-        //   // const response = await fetch(amount)
-        //   // // The value we return becomes the `fulfilled` action payload
-        //   // return response.data
-        //   // console.log(`async`, data)
-        //   // return true;
-        // }, {
-        //   pending: state => {
-        //     state.status = "loading"
-        //   },
-        //   fulfilled: (state, action) => {
-        //     state.status = "idle"
-        //     // if (action.payload != null) {
-        //     //   state.loginSuccess = true
-        //     // } else {
-        //     //   state.loginSuccess = false
-        //     // }
-        //   },
-        //   rejected: state => {
-        //     state.status = "failed"
-        //   },
-        // }),
-        addItem: create.reducer((state, action: PayloadAction<Item>) => {
-            if (state.items.length === 0) {
-                state.items.push({
-                    itemId: action.payload.itemId,
-                    engName: action.payload.engName,
-                    chiName: action.payload.chiName,
-                    price: action.payload.price,
-                    amount: action.payload.amount,
+        getCartByUserId: create.asyncThunk(async (data: any) => {
+            let requestOption ={
+                ...postRequestOptions,
+                body: JSON.stringify({ 
+                  userName: data
                 })
-            } else {
-                let itemExist = false
-                state.items.forEach((item, index) => {
-                    if (item.itemId === action.payload.itemId) {
-                        itemExist = true;
-                        state.items[index] = {
-                            ...item,
-                            amount: item.amount + action.payload.amount,
-                        }
-                    }
-                })
-                if (itemExist === false) {
-                    state.items.push({
-                        itemId: action.payload.itemId,
-                        engName: action.payload.engName,
-                        chiName: action.payload.chiName,
-                        price: action.payload.price,
-                        amount: action.payload.amount,
-                    })
+              }
+              const response = await fetch(`${BACKEND_SERVER}/cart/getCartByUserId`, requestOption)
+              const result = await response.json()
+              return result?.result??null
+          }, {
+            pending: state => {
+              state.status = "loading"
+            },
+            fulfilled: (state, action:any) => {
+                state.status = "idle"
+                if(action.payload != null){
+                    state.cartId = action.payload.cartId
+                    state.items = action.payload.items
                 }
-            }
+            },
+            rejected: state => {
+              state.status = "failed"
+            },
         }),
-        deleteItem: create.reducer((state, action: any) => {
-            let itemIndex = 0
-            state.items.forEach((item, index) => {
-                if (item.itemId === action.payload.itemId) {
-                    itemIndex = index;
-                }
-            })
 
-            if (state.items[itemIndex].amount === 1) {
-                // state.items[itemIndex]
-                let remainArr = []
-                remainArr = state.items.filter((item, index) => {
-                    return index != itemIndex
+        addItem: create.asyncThunk(async (data: any) => {
+            console.log(`async`, data)
+            let requestOption ={
+                ...postRequestOptions,
+                body: JSON.stringify({ 
+                  cartId: data.cartId,
+                  itemId: data.itemId,
+                  amount: data.amount,
+                  userId: data.userId
                 })
-                state.items = remainArr
-            } else {
-                state.items[itemIndex] = {
-                    ...state.items[itemIndex],
-                    amount: state.items[itemIndex].amount - 1
+              }
+              console.log(`requestOption`,requestOption)
+              const response = await fetch(`${BACKEND_SERVER}/cart/addItem`, requestOption)
+              const result = await response.json()
+              console.log(`add item `,result)
+              return result?.result??null
+          }, {
+            pending: state => {
+              state.status = "loading"
+            },
+            fulfilled: (state, action:any) => {
+                state.status = "idle"
+                if(action.payload != null){
+                    state.cartId = action.payload.cartId
+                    state.items = action.payload.items
                 }
-            }
+            },
+            rejected: state => {
+                console.log(`failed`)
+              state.status = "failed"
+            },
+        }),
+
+
+        // deleteItem: create.reducer((state, action: any) => {
+        //     let itemIndex = 0
+        //     state.items.forEach((item, index) => {
+        //         if (item.itemId === action.payload.itemId) {
+        //             itemIndex = index;
+        //         }
+        //     })
+
+        //     if (state.items[itemIndex].amount === 1) {
+        //         // state.items[itemIndex]
+        //         let remainArr = []
+        //         remainArr = state.items.filter((item, index) => {
+        //             return index != itemIndex
+        //         })
+        //         state.items = remainArr
+        //     } else {
+        //         state.items[itemIndex] = {
+        //             ...state.items[itemIndex],
+        //             amount: state.items[itemIndex].amount - 1
+        //         }
+        //     }
+        // }),
+
+        deleteItem: create.asyncThunk(async (data: any) => {
+            console.log(`async`, data)
+            let requestOption ={
+                ...postRequestOptions,
+                body: JSON.stringify({ 
+                  cartId: data.cartId,
+                  itemId: data.itemId,
+                  amount: data.amount,
+                  userId: data.userId
+                })
+              }
+              console.log(`requestOption`,requestOption)
+              const response = await fetch(`${BACKEND_SERVER}/cart/deleteItem`, requestOption)
+              const result = await response.json()
+              console.log(`delete item `,result)
+              return result?.result??null
+          }, {
+            pending: state => {
+              state.status = "loading"
+            },
+            fulfilled: (state, action:any) => {
+                state.status = "idle"
+                if(action.payload != null){
+                    state.cartId = action.payload.cartId
+                    state.items = action.payload.items
+                }
+            },
+            rejected: state => {
+                console.log(`failed`)
+              state.status = "failed"
+            },
         }),
     }),
     // You can define your selectors here. These selectors receive the slice
@@ -150,7 +187,7 @@ export const shoppingCartSlice = createAppSlice({
 })
 
 // Action creators are generated for each case reducer function.
-export const { addItem, deleteItem } =
+export const { getCartByUserId, addItem, deleteItem } =
     shoppingCartSlice.actions
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.

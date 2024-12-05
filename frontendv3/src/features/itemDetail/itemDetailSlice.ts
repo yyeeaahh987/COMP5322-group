@@ -79,10 +79,11 @@ export const itemDetailSlice = createAppSlice({
     //   },
     // }),
 
-    getItemByItemId: create.asyncThunk(
-      async (data: any) => {
+    getItemByItemId: create.asyncThunk(async (data: any) => {
         // const response = await callAPI
         console.log(`async`, data)
+
+
         let requestOption ={
           ...postRequestOptions,
           body: JSON.stringify({ 
@@ -94,6 +95,7 @@ export const itemDetailSlice = createAppSlice({
         const result = await response.json()
         console.log(`result`, result)
         return result?.result??null
+
       }, 
       {
         pending: state => {
@@ -128,6 +130,7 @@ export const itemDetailSlice = createAppSlice({
     ),
 
   }),
+
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
   selectors: {

@@ -1,14 +1,18 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import styles from "./Login.module.css"
 import Grid from '@mui/material/Grid2';
 import { Box, Button, Input, TextField } from "@mui/material"
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
+    selectLoginSuccess,
+    selectUserName,
     validateLogin
 } from "./userSlice"
 import { Header } from "../header/Header";
 import { Declare } from "../declare/Declare";
+import { getCartByUserId } from "../smallShoppingCart/shoppingCartSlice";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const DOMAIN = process.env.REACT_APP_DOMAIN;
 
 // enum GenderEnum {
@@ -28,11 +32,27 @@ interface IFormInput {
 
 export const Login = () => {
     const dispatch = useAppDispatch()
-    //   const count = useAppSelector(selectCount)
-    //   const status = useAppSelector(selectStatus)
-    //   const [incrementAmount, setIncrementAmount] = useState("2")
+    const navigate = useNavigate();
+    const location = useLocation();
 
-    //   const incrementValue = Number(incrementAmount) || 0
+    const loginSuccess = useAppSelector(selectLoginSuccess)
+    const userName = useAppSelector(selectUserName)
+
+    useEffect(() => {
+        console.log(`loginSuccess`, loginSuccess)
+        if (loginSuccess === true) {
+            navigate("/home/promotion");
+            // location(`/home/promotion`);
+            // return (
+            //     <>
+            //         <Link to="/login">Login again</Link>
+            //     </>
+            // )
+
+            // location(`${DOMAIN}/home/promotion`);
+        }
+    }, [loginSuccess])
+
     const {
         control,
         register,
@@ -57,9 +77,10 @@ export const Login = () => {
         })
     }
 
-    function handleRegister(){
-        window.location.href = `${DOMAIN}/register`
+    function handleRegister() {
+        navigate("/register");
     }
+
 
     return (
         <>

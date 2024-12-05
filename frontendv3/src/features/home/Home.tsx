@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,17 +16,18 @@ import Grid from '@mui/material/Grid2';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import HomeIcon from '@mui/icons-material/Home';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { NavBar } from '../navbar/NavBar';
 import { ItemCard } from '../card/ItemCard';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 import { ItemDetail } from '../itemDetail/ItemDetail';
 import { postRequestOptions } from '../../utils/constant';
 import { Header } from '../header/Header';
 import { Declare } from '../declare/Declare';
 import './home.css'
-import { logout } from '../login/userSlice';
+import { logout, selectUserName } from '../login/userSlice';
 import { SShoppingCart } from '../smallShoppingCart/SShoppingCart';
+import { getCartByUserId } from '../smallShoppingCart/shoppingCartSlice';
 
 const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
 const DOMAIN = process.env.REACT_APP_DOMAIN;
@@ -40,13 +41,18 @@ const settings = [
     {
         action: "logout",
         display: '登出'
+    },
+    {
+        action: "order",
+        display: '訂單'
     }
 ];
 
 export const Home = () => {
     const dispatch = useAppDispatch()
-
-
+    const navigate = useNavigate();
+    const userName = useAppSelector(selectUserName)
+    console.log(`userName`,userName)
     const [file, setFile]: any = useState(null);
     const [fileId, setFileId]: any = useState(null);
 
@@ -70,6 +76,14 @@ export const Home = () => {
 
 
     const [subMenu, setSubMenu] = useState<null | number>(null)
+
+    useEffect(() => {
+        if (userName != null && userName !="") {
+            dispatch(getCartByUserId(userName))
+        }
+    }, [userName])
+
+
     const handleFileChange = (event: any) => {
         setFile(event.target.files[0]);
     };
@@ -141,8 +155,7 @@ export const Home = () => {
 
 
     const handleOpenSmallShoppingCart = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElShop(event.currentTarget);
-        setDropdownCartMenu(true);
+        navigate("/home/cart");
     };
 
     const handleCloseSmallShoppingCart = () => {
@@ -152,13 +165,16 @@ export const Home = () => {
 
     function handleIconMenuOnClick(action: string) {
         if (action === "logout") {
-            window.location.href = `${DOMAIN}`
+            navigate('/')
             dispatch(logout())
+        }else if(action === "order"){
+            navigate('/home/order')
+            // dispatch(logout())
         }
     }
 
     function handleOpenShoppingCart() {
-        window.location.href = `${DOMAIN}/home/cart`
+        navigate(`/home/cart`)
     }
 
     function handleMouseOver(event: React.MouseEvent<HTMLElement>, index: number) {
@@ -183,7 +199,7 @@ export const Home = () => {
     }
 
     function handleClickHome() {
-        window.location.href = `${DOMAIN}/home/promotion`
+        navigate(`/home/promotion`)
     }
 
     return (
@@ -276,10 +292,10 @@ export const Home = () => {
                                         {(subMenu == 0) &&
                                             <>
                                                 <MenuItem onClick={() => {
-                                                    window.location.href = `${DOMAIN}/home/overview/食品及飲品/飲品、即沖飲品、酒類`
+                                                    navigate(`/home/overview/食品及飲品/飲品、即沖飲品、酒類`)
                                                 }}>飲品、即沖飲品、酒類</MenuItem>
                                                 <MenuItem onClick={() => {
-                                                    window.location.href = `${DOMAIN}/home/overview/食品及飲品/米、麵、油、烘焙`
+                                                    navigate(`/home/overview/食品及飲品/米、麵、油、烘焙`)
                                                 }}
                                                 >米、麵、油、烘焙</MenuItem>
                                             </>
@@ -287,7 +303,7 @@ export const Home = () => {
                                         {(subMenu == 1) &&
                                             <>
                                                 <MenuItem onClick={() => {
-                                                    window.location.href = `${DOMAIN}/home/overview/嬰幼兒奶粉/奶粉`
+                                                    navigate(`/home/overview/嬰幼兒奶粉/奶粉`)
                                                 }}
                                                 >嬰幼兒奶粉</MenuItem>
                                             </>
@@ -298,7 +314,7 @@ export const Home = () => {
                                     {/* <Tooltip title="購物車"> */}
                                     <IconButton
                                         name="shoppingCartIcon"
-                                        // onClick={handleOpenSmallShoppingCart}
+                                        onClick={handleOpenSmallShoppingCart}
                                         sx={{ p: 0 }}>
                                         <ShoppingCartIcon className='nav-icon'></ShoppingCartIcon>
                                     </IconButton>

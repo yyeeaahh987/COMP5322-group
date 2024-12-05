@@ -10,6 +10,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Header } from "../header/Header";
 import { Declare } from "../declare/Declare";
 import { registerNewUser } from "../../utils/loginFunction/loginFunction";
+import { useNavigate } from "react-router-dom";
 
 const DOMAIN = process.env.REACT_APP_DOMAIN;
 
@@ -20,6 +21,7 @@ interface IFormInput {
 
 export const Register = () => {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate();
     //   const count = useAppSelector(selectCount)
     //   const status = useAppSelector(selectStatus)
     //   const [incrementAmount, setIncrementAmount] = useState("2")
@@ -43,7 +45,7 @@ export const Register = () => {
         console.log(`result`, result)
         if (result) {
             window.alert("success")
-            window.location.href = `${DOMAIN}`
+            navigate("/");
         } else {
             window.alert("fail to register")
         }

@@ -21,7 +21,8 @@ import {
     selectProductUnit,
     selectStockAmt,
 } from "./itemDetailSlice"
-import { addItem } from '../smallShoppingCart/shoppingCartSlice';
+import { addItem, selectCartId } from '../smallShoppingCart/shoppingCartSlice';
+import { selectUserName } from '../login/userSlice';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -37,6 +38,8 @@ export const ItemDetail = () => {
     const [disableRemoveButton, setDisableRemoveButton] = useState(false)
     const [disableAddButton, setDisableAddButton] = useState(false)
     const dispatch = useAppDispatch()
+    const userName = useAppSelector(selectUserName)
+    const cartId = useAppSelector(selectCartId)
     const productId = useAppSelector(selectProductId)
     const productName = useAppSelector(selectProductName)
     const productEngName = useAppSelector(selectProductEngName)
@@ -54,7 +57,6 @@ export const ItemDetail = () => {
         console.log(`itemId`, itemId)
         dispatch(getItemByItemId(itemId))
         console.log(`stockAmt`, inStock)
-
     }, [])
 
     useEffect(() => {
@@ -62,7 +64,7 @@ export const ItemDetail = () => {
             console.log(`58`)
             setDisableRemoveButton(true)
             setDisableAddButton(true)
-        }else {
+        } else {
             console.log(`67`)
             setDisableRemoveButton(false)
             setDisableAddButton(false)
@@ -93,6 +95,8 @@ export const ItemDetail = () => {
             chiName: productChiName,
             price: price,
             amount: pendingPurchaseAmt,
+            cartId: cartId,
+            userId: userName,
         }))
     }
 
@@ -209,6 +213,7 @@ export const ItemDetail = () => {
                     </Grid>
                 </Grid>
             </Grid>
+            <pre>{JSON.stringify(pendingPurchaseAmt,null,2)}</pre>
             <Grid container>
                 <Grid size={12}>
                     <div className='group-title'>描述</div>

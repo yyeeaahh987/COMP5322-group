@@ -33,6 +33,7 @@ router.post('/getUserDetailById', async function (req: Request, res: Response) {
         result: null
     }
     const { userId } = req.body
+    console.log(`userId`,userId)
     const result = await UserService.getUserDetailById(userId);
     if (result == null) {
         resultObj.code = ReturnStatusCode.NO_DATA_FOUND

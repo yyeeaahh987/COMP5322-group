@@ -10,6 +10,9 @@ import { addItem, deleteItem, selectCartId, selectItems } from '../features/smal
 import { Box, IconButton, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { selectUserName } from '../features/login/userSlice';
+import { closeLoading, openLoading } from '../features/loader/loadingSlice';
+import { placeOrder } from '../features/order/orderSlice';
+import { useNavigate } from 'react-router-dom';
 
 interface CartProps {
   itemId: number;
@@ -18,10 +21,11 @@ interface CartProps {
 }
 
 export const ShoppingCart = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch()
   const cartId = useAppSelector(selectCartId)
   const items = useAppSelector(selectItems)
-
+  const userName = useAppSelector(selectUserName)
   console.log(`cartId`, cartId)
   console.log(`items`, items)
 
@@ -34,37 +38,23 @@ export const ShoppingCart = () => {
     setAnchorEl(null);
   };
 
-  function handleOrder(){
+  function handleOrder() {
     console.log(`handleOrder`)
-    
+    let requestObj = {
+      cartId: cartId,
+      userId:userName,
+    }
+    try{
+      dispatch(placeOrder(requestObj))
+      //success nevigate to order
+      navigate("/home/order");
+    }catch(e){
+
+    }
+
   }
   return (
     <>
-
-      {/* <div>
-        <Button
-          id="basic-button"
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-        >
-          Dashboard
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
-        </Menu>
-      </div> */}
       {
         items.length > 0 && items.map((item: any, index) => {
           return (
@@ -80,7 +70,7 @@ export const ShoppingCart = () => {
         })
       }
       {
-        items.length > 0 && 
+        items.length > 0 &&
         <>
           <Button variant='outlined' onClick={handleOrder}>下單</Button>
         </>
@@ -96,8 +86,9 @@ const CartItem = ((props: CartProps) => {
   const userName = useAppSelector(selectUserName)
   const cartId = useAppSelector(selectCartId)
   const [disableRemoveButton, setDisableRemoveButton] = useState(false);
+  console.log(`disableRemoveButton`, disableRemoveButton)
   const [disableAddButton, setDisableAddButton] = useState(false);
-
+  console.log(`disableAddButton`, disableAddButton)
   useEffect(() => {
     if (props.amount === 0) {
       setDisableRemoveButton(true)
@@ -109,15 +100,17 @@ const CartItem = ((props: CartProps) => {
   function handleClickMinus() {
     let newAmount = props.amount - 1
     console.log(`newAmount`, newAmount)
+    dispatch(openLoading())
     dispatch(deleteItem({
       cartId: cartId,
       itemId: props.itemId,
       amount: newAmount,
       userId: userName
     }))
+    dispatch(closeLoading())
   }
 
-  function handleDelete(){
+  function handleDelete() {
     dispatch(deleteItem({
       cartId: cartId,
       itemId: props.itemId,
@@ -125,15 +118,18 @@ const CartItem = ((props: CartProps) => {
       userId: userName
     }))
   }
-  function handleClickPlus(){
-    let newAmount = props.amount - 1
+  function handleClickPlus() {
+    let newAmount = props.amount + 1
     console.log(`newAmount`, newAmount)
+    dispatch(openLoading())
     dispatch(addItem({
       cartId: cartId,
       itemId: props.itemId,
       amount: newAmount,
-      userId: userName
+      userId: userName,
+      mode: "SHOPPING_CART"
     }))
+    dispatch(closeLoading())
   }
   return (
     <>

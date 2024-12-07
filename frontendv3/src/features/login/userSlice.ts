@@ -56,7 +56,7 @@ export const userSlice = createAppSlice({
 
     }),
     validateLogin: create.asyncThunk(async (data: any) => {
-      let returnObj ={}
+      let returnObj = {}
       let requestOption = {
         ...postRequestOptions,
         body: JSON.stringify({
@@ -69,53 +69,26 @@ export const userSlice = createAppSlice({
       const result = await response.json()
       console.log(`result`, result)
       // let loginResult = result?.result ?? false
-      returnObj={
-        result :result?.result ?? false,
+      returnObj = {
+        result: result?.result ?? false,
         userName: data.loginAccountName,
       }
       return returnObj
-
-      // returnObj.loginResult = loginResult
-      // if (loginResult === true) {
-      //   //get user profile
-      //   requestOption = {
-      //     ...postRequestOptions,
-      //     body: JSON.stringify({
-      //       userId: data.loginAccountName,
-      //     })
-      //   }
-      //   const userProfileResponse = await fetch(`${BACKEND_SERVER}/user/getUserDetailById`, requestOption)
-      //   const userProfileResult = await userProfileResponse.json()
-      //   console.log(`userProfileResult`,userProfileResult)
-      //   returnObj.userInfo = userProfileResult.result
-      //   //get cart info
-      //   requestOption = {
-      //     ...postRequestOptions,
-      //     body: JSON.stringify({
-      //       userId: data.loginAccountName,
-      //     })
-      //   }
-      //   const cartResponse = await fetch(`${BACKEND_SERVER}/cart/getCartByUserId`, requestOption)
-      //   const cartResult = await cartResponse.json()
-      //   console.log(`cartResult`,cartResult)
-      //   returnObj.cartInfo = cartResult.result
-      // }
-
-      // return returnObj
-
 
     }, {
       pending: state => {
         state.status = "loading"
       },
-      fulfilled: (state, action:any) => {
-        console.log(`state`,state)
-        console.log(`action`,action)
+      fulfilled: (state, action: any) => {
+        console.log(`state`, state)
+        console.log(`action`, action)
         state.status = "idle"
         console.log(`action`, action.payload)
         if (action.payload.result == true) {
           state.loginSuccess = true
           state.userName = action.payload.userName
+          localStorage.setItem("userName", action.payload.userName);
+          localStorage.setItem("lastActionTime", new Date().toString());
         } else {
           state.loginSuccess = false
           window.alert("Wrong username or password")
@@ -125,6 +98,50 @@ export const userSlice = createAppSlice({
         state.status = "failed"
       },
     }),
+
+    // getUserDetailByUserName: create.asyncThunk(async (userName: any) => {
+    //   let returnObj = {}
+    //   let requestOption = {
+    //     ...postRequestOptions,
+    //     body: JSON.stringify({
+    //       userId: userName,
+    //     })
+    //   }
+
+    //   const response = await fetch(`${BACKEND_SERVER}/user/getUserDetailById`, requestOption)
+    //   const result = await response.json()
+    //   console.log(`result`, result)
+    //   // let loginResult = result?.result ?? false
+    //   returnObj = {
+    //     result: result?.result ?? null,
+    //     userObj: result?.result ?? null
+    //   }
+    //   return returnObj
+
+    // }, {
+    //   pending: state => {
+    //     state.status = "loading"
+    //   },
+    //   fulfilled: (state, action: any) => {
+    //     console.log(`state`, state)
+    //     console.log(`action`, action.payload.result)
+    //     state.status = "idle"
+    //     console.log(`action`, action.payload)
+    //     if (action.payload.result != null) {
+    //       state.loginSuccess = true
+    //       state.userName = action.payload.result.USER_ID
+    //       localStorage.setItem("userName", action.payload.result.USER_ID);
+    //       localStorage.setItem("lastActionTime", new Date().toString());
+    //     } else {
+    //       state.loginSuccess = false
+    //       // window.alert("Wrong username or password")
+    //     }
+    //   },
+    //   rejected: state => {
+    //     state.status = "failed"
+    //   },
+    // }),
+
     logout: create.reducer(state => {
       state = initialState
     }),
@@ -216,6 +233,7 @@ export const {
   selectLanguage,
   selectUsed
 } = userSlice.selectors
+
 
 // // We can also write thunks by hand, which may contain both sync and async logic.
 // // Here's an example of conditionally dispatching actions based on current state.

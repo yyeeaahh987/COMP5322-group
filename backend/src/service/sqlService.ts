@@ -13,31 +13,12 @@ const connection = mysql.createPool({
 })
 
 export async function queryToDb(sql: string) {
-    // connection.connect()
-    // // let result;
-    // connection.p
     let result
     try{
         const [rows, fields]:any = await connection.promise().query(sql);
-        // const rows =  await connection.promise().query(sql);
         result= rows
     }catch(e:any){
 
     }
     return result;
-    // await connection.query(sql, (err: any, rows: any, fields: any) => {
-    //     if (err) {
-    //         throw err
-    //     }
-    //     console.log(`rows`, rows)
-    //     result = rows;
-    //     // console.log(`rows`,rows)
-    //     // return rows;
-
-    //     // result = rows
-    // })
-
-    connection.end()
-    // console.log(`result`, result)
-    // return result;
 }

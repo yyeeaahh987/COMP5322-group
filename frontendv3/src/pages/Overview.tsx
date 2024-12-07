@@ -35,7 +35,7 @@ export const Overview = () => {
             setProductList(list)
         })
             ()
-    }, [])
+    }, [category,subcategory])
 
     return (
         <>

@@ -1,8 +1,3 @@
-import nodemailer from "nodemailer";
-import moment from 'moment'
-import * as sqlService from '../service/sqlService';
-import * as itemService from '../service/itemService'
-import { ReturnStatusCode, ReturnStatusMessage } from '../enum/enum'
 import mysql from 'mysql2';
 
 const DATABASE_URL = process.env.DATABASE_URL
@@ -18,24 +13,14 @@ const connection = mysql.createPool({
 })
 
 export async function place(cartId: any, userId: any, price: any) {
-
-    console.log(`place`, cartId, userId, price)
-    let arr: any[] = []
-    let cart = {
-        cartId: null,
-        items: arr
-    }
     let orderId = null
     try {
         let sql = `select a.CART_ID ,a.ITEM_ID ,a.AMOUNT ,b.CHI_NAME ,b.PRICE  from SHOPPING_CART a, ITEM b where a.CART_ID= ?
         and a.ITEM_ID =b.ITEM_ID `
         const [cartRow]: any = await connection.promise().query(sql, [cartId]);
-        let result = cartRow ? cartRow : null
-        console.log(`cartRow`, cartRow);
         if (cartRow.length > 0) {
             sql = `insert into USER_ORDER  (USER_ID,PRICE,ADDRESS,ORDER_STATUS) values(? ,?,?,?)`
-            const [userOrderRows]: any = await connection.promise().query(sql, [userId, price, "", "PENDING"]);
-            console.log(`userOrderRows`, userOrderRows.insertId)
+            const [userOrderRows]: any = await connection.promise().query(sql, [userId, price, "", "待確認"]);
             orderId = userOrderRows.insertId
 
             for (let i = 0; i < cartRow.length; i++) {
@@ -56,18 +41,21 @@ export async function place(cartId: any, userId: any, price: any) {
 }
 
 export async function getOrderByUserId(userId: any) {
-    console.log(`getOrderByUserId`, userId)
     try {
         let sql = `select * from USER_ORDER uo  where USER_ID = ?`
         const [userOrderRow]: any = await connection.promise().query(sql, [userId]);
         let result = userOrderRow ? userOrderRow : null
-        console.log(`userOrderRow`, userOrderRow);
         if (userOrderRow.length > 0) {
+            let totalPrice = 0
             for (let i = 0; i < userOrderRow.length; i++) {
                 sql = `select * from ORDER_ITEM where ORDER_ID = ?`
                 let [userOrderRows]: any = await connection.promise().query(sql, [userOrderRow[i].ORDER_ID]);
                 result[i].items = userOrderRows
-            }
+                for(let j=0; j < userOrderRows.length; j++){
+                    totalPrice = totalPrice + Number(userOrderRows[j].PRICE)
+                }
+                result[i].PRICE = totalPrice
+            }            
         }
         return result
     } catch (e) {

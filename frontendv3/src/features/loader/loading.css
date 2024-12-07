@@ -1,0 +1,11 @@
+.loading{
+    background: #8d848400;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    z-index: 30001; 
+}

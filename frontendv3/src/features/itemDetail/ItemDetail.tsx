@@ -97,6 +97,7 @@ export const ItemDetail = () => {
             amount: pendingPurchaseAmt,
             cartId: cartId,
             userId: userName,
+            mode:"ITEM_DETAIL"
         }))
     }
 
@@ -154,12 +155,9 @@ export const ItemDetail = () => {
                     <Grid size={12}>
                         <span className="currentPrice">{`$${price}`}</span>
                     </Grid>
-                    <Grid container>
+                    <Grid container spacing={2}>
                         <Grid size={6}>
                             <div className='input-container'>
-                                {/* <button className="minus" type="button" onClick={handleClickMinus}>
-                                    
-                                </button> */}
                                 <Grid container>
                                     <Grid size={1}>
                                         <div style={{ paddingLeft: "5px" }}></div>
@@ -197,14 +195,6 @@ export const ItemDetail = () => {
                                         <div style={{ paddingRight: "5px" }}></div>
                                     </Grid>
                                 </Grid>
-
-
-                                {/* <input type="number">{pendingPurchaseAmt}</input> */}
-
-                                {/* <input type="number"></input> */}
-                                {/* <button className="plus" type="button" onClick={handleClickPlus}>
-                                    <AddIcon></AddIcon>
-                                </button> */}
                             </div>
                         </Grid>
                         <Grid size={6}>

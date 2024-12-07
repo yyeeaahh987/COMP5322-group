@@ -39,14 +39,25 @@ interface IFormInput {
 const pages = ['食品及飲品', '母嬰'];
 const settings = [
     {
+        action: "order",
+        display: '訂單'
+    },
+    {
         action: "logout",
         display: '登出'
     },
-    {
-        action: "order",
-        display: '訂單'
-    }
 ];
+
+const categoryMenu0 = [
+    {
+        description:"飲品、即沖飲品、酒類",
+        nevigateLink:"/home/overview/食品及飲品/飲品、即沖飲品、酒類"
+    },
+    {
+        description:"米、麵、油、烘焙",
+        nevigateLink:"/home/overview/食品及飲品/米、麵、油、烘焙"
+    },
+]
 
 export const Home = () => {
     const dispatch = useAppDispatch()
@@ -290,15 +301,13 @@ export const Home = () => {
                                     // onClose={handleMenuClose}
                                     >
                                         {(subMenu == 0) &&
-                                            <>
+                                        categoryMenu0.map((eachSubMenu)=>{
+                                            return (
                                                 <MenuItem onClick={() => {
-                                                    navigate(`/home/overview/食品及飲品/飲品、即沖飲品、酒類`)
-                                                }}>飲品、即沖飲品、酒類</MenuItem>
-                                                <MenuItem onClick={() => {
-                                                    navigate(`/home/overview/食品及飲品/米、麵、油、烘焙`)
-                                                }}
-                                                >米、麵、油、烘焙</MenuItem>
-                                            </>
+                                                    navigate(eachSubMenu.nevigateLink)
+                                                }}>{eachSubMenu.description}</MenuItem>
+                                            )
+                                        })
                                         }
                                         {(subMenu == 1) &&
                                             <>

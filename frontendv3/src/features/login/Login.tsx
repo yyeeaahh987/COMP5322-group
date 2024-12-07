@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import styles from "./Login.module.css"
 import Grid from '@mui/material/Grid2';
 import { Box, Button, Input, TextField } from "@mui/material"
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -13,43 +12,19 @@ import { Header } from "../header/Header";
 import { Declare } from "../declare/Declare";
 import { getCartByUserId } from "../smallShoppingCart/shoppingCartSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-const DOMAIN = process.env.REACT_APP_DOMAIN;
-
-// enum GenderEnum {
-//     female = "female",
-//     male = "male",
-//     other = "other",
-// }
-// interface IFormInput {
-//     firstName: string
-//     gender: GenderEnum
-//   }
-
-interface IFormInput {
-    loginAccountName: string
-    loginAccountPasswowrd: string
-}
+import './login.css'
+import { closeLoading, openLoading } from "../loader/loadingSlice";
 
 export const Login = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
-    const location = useLocation();
 
     const loginSuccess = useAppSelector(selectLoginSuccess)
-    const userName = useAppSelector(selectUserName)
 
     useEffect(() => {
         console.log(`loginSuccess`, loginSuccess)
         if (loginSuccess === true) {
             navigate("/home/promotion");
-            // location(`/home/promotion`);
-            // return (
-            //     <>
-            //         <Link to="/login">Login again</Link>
-            //     </>
-            // )
-
-            // location(`${DOMAIN}/home/promotion`);
         }
     }, [loginSuccess])
 
@@ -67,7 +42,9 @@ export const Login = () => {
     });
     const onSubmit: SubmitHandler<any> = (data) => {
         console.log(data)
+        dispatch(openLoading())
         dispatch(validateLogin(data))
+        dispatch(closeLoading())
     }
 
     function handleReset() {
@@ -86,11 +63,11 @@ export const Login = () => {
         <>
             <Header></Header>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Grid container>
+                <Grid container spacing={1}>
                     <Grid size={12}>
-                        <h2>仲未係會員?​ 快啲加入, 有好多優惠等緊你！</h2>
+                        <h2 style={{ textAlign: "center" }}>仲未係會員?​ 快啲加入, 有好多優惠等緊你！</h2>
                     </Grid>
-                    <Grid size={6} justifyContent={"center"}>
+                    <Grid size={6}>
                         <Box className={"sign-in-box"}>
                             <Grid size={12}>
                                 登入
@@ -115,9 +92,15 @@ export const Login = () => {
                                     render={({ field }) => <TextField variant="standard"  {...field} />}
                                 />
                             </Grid>
+                            <Grid size={12}>
+                                <br></br>
+                            </Grid>
+                            <Grid size={12}>
+                                <Button className="submit-button" variant="outlined" type="submit" >登入</Button>
+                                <span> </span>
+                                <Button className="clear-button" color="error" variant="outlined" onClick={handleReset}>清取</Button>
+                            </Grid>
                         </Box>
-                        <Button className="submit-button" variant="outlined" type="submit">登入</Button>
-                        <Button className="clear-button" variant="outlined" onClick={handleReset}>清取</Button>
                     </Grid>
 
                     <Grid size={6} justifyContent={"center"}>

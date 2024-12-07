@@ -81,10 +81,19 @@
 }
 
 .sign-in-box{
-  background-color: lightgrey;
+  /* background-color: lightgrey; */
   width: 200px;
   height: 200px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 20px;
   box-sizing: border-box;
+}
+
+.submit-button{
+  padding: 2px;
+}
+
+.clear-button{
+  color:red;
+  padding: 2px;
 }

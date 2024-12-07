@@ -7,6 +7,7 @@ import logo from "./logo.svg"
 import { Login } from "./features/login/Login"
 import { useAppDispatch, useAppSelector } from "./app/hooks"
 import {
+  // getUserDetailByUserName,
   selectLoginSuccess,
   selectUserName
 } from "./features/login/userSlice"
@@ -21,6 +22,8 @@ import { Register } from "./features/register/Register"
 import { UploadItem } from "./features/upload/UploadItem"
 import { getCartByUserId } from "./features/smallShoppingCart/shoppingCartSlice"
 import { Order } from "./pages/Order"
+import { Loader } from "./features/loader/Loading"
+import { selectLoadingStatus } from "./features/loader/loadingSlice"
 
 const DOMAIN = process.env.REACT_APP_DOMAIN;
 
@@ -29,10 +32,22 @@ const App = () => {
   // const navigate = useNavigate();
   // const location = useLocation();
    
-  // const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
   // const loginSuccess = useAppSelector(selectLoginSuccess)
-  // const userName = useAppSelector(selectUserName)
-  
+  const userName = useAppSelector(selectUserName)
+  const loadingStatus = useAppSelector(selectLoadingStatus)
+  // useEffect(()=>{
+  //   console.log(`time `,localStorage.getItem("lastActionTime"))
+  //   console.log(`userName `,localStorage.getItem("userName"))
+  //   console.log(`userName `,userName)
+  //   console.log(`userName `,userName === "")
+  //   localStorage.setItem("lastActionTime", new Date().toString());
+  //   if(userName === ""){
+  //     dispatch(getUserDetailByUserName(localStorage.getItem("userName") ))
+  //   }
+
+  // },[localStorage.getItem("userName"),localStorage.getItem("lastActionTime"),userName])
+
   const router = createBrowserRouter([
     {
       path: "/home",
@@ -131,7 +146,13 @@ const App = () => {
   //   }
   // }, [loginSuccess])
 
-  return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+  return <>
+  {
+    loadingStatus === true &&   <Loader></Loader>
+  }
+  <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+  </> 
+  
 }
 
 export default App

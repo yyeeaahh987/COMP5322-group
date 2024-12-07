@@ -59,7 +59,7 @@ const OrderItem = ((props: OrderProps) => {
                         <span>{`訂單編號: ${props.orderId}`}</span>
                     </Grid>
                     <Grid size={12}>
-                        <span>{`訂單總價 ${props.orderPrice}`}</span>
+                        <span>{`訂單總價 $${props.orderPrice}`}</span>
                     </Grid>
                     <Grid size={12}>
                         <span>{`訂單狀態 ${props.orderStatus}`}</span>

@@ -1,13 +1,7 @@
-import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
-import type { AppThunk } from "../../app/store"
 import { postRequestOptions } from "../../utils/constant"
-import { ItemDetailSliceState, shoppingCartSlice } from "../smallShoppingCart/shoppingCartSlice";
-// import { fetchCount } from "./counterAPI"
 const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
-console.log(`BACKEND_SERVER abc`, BACKEND_SERVER)
 export interface UserSliceState {
-  // value: number
   status: "idle" | "loading" | "failed"
   loginSuccess: boolean
   userName: string
@@ -67,8 +61,6 @@ export const userSlice = createAppSlice({
 
       const response = await fetch(`${BACKEND_SERVER}/user/login`, requestOption)
       const result = await response.json()
-      console.log(`result`, result)
-      // let loginResult = result?.result ?? false
       returnObj = {
         result: result?.result ?? false,
         userName: data.loginAccountName,
@@ -80,10 +72,7 @@ export const userSlice = createAppSlice({
         state.status = "loading"
       },
       fulfilled: (state, action: any) => {
-        console.log(`state`, state)
-        console.log(`action`, action)
         state.status = "idle"
-        console.log(`action`, action.payload)
         if (action.payload.result == true) {
           state.loginSuccess = true
           state.userName = action.payload.userName
@@ -99,95 +88,51 @@ export const userSlice = createAppSlice({
       },
     }),
 
-    // getUserDetailByUserName: create.asyncThunk(async (userName: any) => {
-    //   let returnObj = {}
-    //   let requestOption = {
-    //     ...postRequestOptions,
-    //     body: JSON.stringify({
-    //       userId: userName,
-    //     })
-    //   }
+    getUserDetailByUserName: create.asyncThunk(async (userName: any) => {
+      let returnObj = {}
+      let requestOption = {
+        ...postRequestOptions,
+        body: JSON.stringify({
+          userId: userName,
+        })
+      }
 
-    //   const response = await fetch(`${BACKEND_SERVER}/user/getUserDetailById`, requestOption)
-    //   const result = await response.json()
-    //   console.log(`result`, result)
-    //   // let loginResult = result?.result ?? false
-    //   returnObj = {
-    //     result: result?.result ?? null,
-    //     userObj: result?.result ?? null
-    //   }
-    //   return returnObj
+      const response = await fetch(`${BACKEND_SERVER}/user/getUserDetailById`, requestOption)
+      const result = await response.json()
+      returnObj = {
+        result: result?.result ?? null,
+        userObj: result?.result ?? null
+      }
+      return returnObj
 
-    // }, {
-    //   pending: state => {
-    //     state.status = "loading"
-    //   },
-    //   fulfilled: (state, action: any) => {
-    //     console.log(`state`, state)
-    //     console.log(`action`, action.payload.result)
-    //     state.status = "idle"
-    //     console.log(`action`, action.payload)
-    //     if (action.payload.result != null) {
-    //       state.loginSuccess = true
-    //       state.userName = action.payload.result.USER_ID
-    //       localStorage.setItem("userName", action.payload.result.USER_ID);
-    //       localStorage.setItem("lastActionTime", new Date().toString());
-    //     } else {
-    //       state.loginSuccess = false
-    //       // window.alert("Wrong username or password")
-    //     }
-    //   },
-    //   rejected: state => {
-    //     state.status = "failed"
-    //   },
-    // }),
+    }, {
+      pending: state => {
+        state.status = "loading"
+      },
+      fulfilled: (state, action: any) => {
+        state.status = "idle"
+        if (action.payload.result != null) {
+          state.loginSuccess = true
+          state.userName = action.payload.result.USER_ID
+          localStorage.setItem("userName", action.payload.result.USER_ID);
+          localStorage.setItem("lastActionTime", new Date().toString());
+        } else {
+          state.loginSuccess = false
+          window.alert("Wrong username or password")
+        }
+      },
+      rejected: state => {
+        state.status = "failed"
+      },
+    }),
 
     logout: create.reducer(state => {
-      state = initialState
-    }),
-    // increment: create.reducer(state => {
-    //   // Redux Toolkit allows us to write "mutating" logic in reducers. It
-    //   // doesn't actually mutate the state because it uses the Immer library,
-    //   // which detects changes to a "draft state" and produces a brand new
-    //   // immutable state based off those changes
-    //   state.value += 1
-    // }),
-    // decrement: create.reducer(state => {
-    //   state.value -= 1
-    // }),
-    // // Use the `PayloadAction` type to declare the contents of `action.payload`
-    // incrementByAmount: create.reducer(
-    //   (state, action: PayloadAction<number>) => {
-    //     state.value += action.payload
-    //   },
-    // ),
-    // // The function below is called a thunk and allows us to perform async logic. It
-    // // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-    // // will call the thunk with the `dispatch` function as the first argument. Async
-    // // code can then be executed and other actions can be dispatched. Thunks are
-    // // typically used to make async requests.
-    // incrementAsync: create.asyncThunk(
-    //   async (amount: number) => {
-    //     // const response = await fetchCount(amount)
-    //     // // The value we return becomes the `fulfilled` action payload
-    //     // return response.data
+      localStorage.setItem("userName", "");
+      localStorage.setItem("lastActionTime", "");
+      state.loginSuccess = false
+      state.userName = "" 
 
-    //     const response = null
-    //     return response;
-    //   },
-    //   {
-    //     pending: state => {
-    //       state.status = "loading"
-    //     },
-    //     fulfilled: (state, action) => {
-    //       state.status = "idle"
-    //       state.value += action?.payload??0
-    //     },
-    //     rejected: state => {
-    //       state.status = "failed"
-    //     },
-    //   },
-    // ),
+    }),
   }),
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
@@ -212,7 +157,7 @@ export const userSlice = createAppSlice({
 })
 
 // Action creators are generated for each case reducer function.
-export const { login, validateLogin, logout } =
+export const { login, validateLogin, logout,getUserDetailByUserName } =
   userSlice.actions
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.

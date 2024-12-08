@@ -46,7 +46,6 @@ export const orderSlice = createAppSlice({
             },
         }),
         getOrder: create.asyncThunk(async (data: any) => {
-            console.log(`data`,data)
             let requestOption ={
                 ...postRequestOptions,
                 body: JSON.stringify({ 
@@ -55,7 +54,6 @@ export const orderSlice = createAppSlice({
               }
               const response = await fetch(`${BACKEND_SERVER}/order/getOrderByUserId`, requestOption)
               const result = await response.json()
-              console.log(`getOrderByUserId`,result)
               return result?.result??null
           }, {
             pending: state => {
@@ -63,7 +61,6 @@ export const orderSlice = createAppSlice({
             },
             fulfilled: (state, action:any) => {
                 state.status = "idle"
-                console.log(`getOrderByUserId`,action.payload)
                 if(action.payload != null){
                     state.orders = action.payload
                 }

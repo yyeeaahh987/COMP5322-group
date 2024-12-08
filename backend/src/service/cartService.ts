@@ -56,7 +56,7 @@ export async function addItem(cartId: any, itemId: any, amount: any, userId: any
             const [cartRows, fields]: any = await connection.promise().query(sql, [cartId, itemId]);
             if (cartRows.length > 0) {
                 //item exist >>  call update current record
-                let newAmt = cartRows?.[0]?.AMOUNT ?? 0 + amount
+                let newAmt = (cartRows?.[0]?.AMOUNT ?? 0) + Number(amount)
                 sql = `update SHOPPING_CART set amount = ? where cart_id =? and item_id=?`
                 const [updatedRow, fields]: any = await connection.promise().query(sql, [newAmt, cartId, itemId]);
             } else {
@@ -67,10 +67,11 @@ export async function addItem(cartId: any, itemId: any, amount: any, userId: any
 
         } else {
             //cart not exist
-            sql = `INSERT INTO SHOPPING_CART_SUBSCRIPTION (CART_ID , USER_ID) VALUES (?,?)`
-            const [insertCartSubRows]: any = await connection.promise().query(sql, [cartId, userId]);
+            sql = `INSERT INTO SHOPPING_CART_SUBSCRIPTION (USER_ID) VALUES (?)`
+            const [insertCartSubRows]: any = await connection.promise().query(sql, [userId]);
+            let newCartId = insertCartSubRows.insertId
             sql = `INSERT INTO SHOPPING_CART (CART_ID , ITEM_ID , AMOUNT) VALUES (?,?,?)`
-            const [insertCartRows]: any = await connection.promise().query(sql, [cartId, itemId, amount]);
+            const [insertCartRows]: any = await connection.promise().query(sql, [newCartId, itemId, amount]);
         }
         return getCartByUserId(userId)
     } catch (e) {

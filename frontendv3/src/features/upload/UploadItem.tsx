@@ -17,7 +17,6 @@ export const UploadItem = () => {
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = async function () {
-            console.log(reader.result);
 
             let body = {
                 file: reader.result,
@@ -27,13 +26,10 @@ export const UploadItem = () => {
                 ...postRequestOptions,
                 body: JSON.stringify(body)
             }
-            console.log(`requestOption`, requestOption)
             const response = await fetch(`${BACKEND_SERVER}/item/uploadImage`, requestOption)
             const result = await response.json()
-            console.log(`result`, result)
         };
         reader.onerror = function (error) {
-            console.log('Error: ', error);
         };
     };
 

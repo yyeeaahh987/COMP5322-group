@@ -3,9 +3,7 @@ import Grid from '@mui/material/Grid2';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { NavBar } from '../navbar/NavBar';
-import { ItemCard } from '../card/ItemCard';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './ItemDetail.css'
 import { Box, Button, IconButton, TextField } from '@mui/material';
 import {
@@ -23,18 +21,10 @@ import {
 } from "./itemDetailSlice"
 import { addItem, selectCartId } from '../smallShoppingCart/shoppingCartSlice';
 import { selectUserName } from '../login/userSlice';
-
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
-interface IFormInput {
-    accountName: string
-    accountPasswowrd: string
-}
+import { openPopup } from '../alertPopup/alertPopupSlice';
 
 export const ItemDetail = () => {
     let { itemId } = useParams();
-    console.log(`itemId`, itemId)
     const [disableRemoveButton, setDisableRemoveButton] = useState(false)
     const [disableAddButton, setDisableAddButton] = useState(false)
     const dispatch = useAppDispatch()
@@ -47,32 +37,28 @@ export const ItemDetail = () => {
     const productImage = useAppSelector(selectProductImage)
     const productUnit = useAppSelector(selectProductUnit)
     const inStock = useAppSelector(selectInStock)
-    console.log(`inStock`, inStock)
     const stockAmt = useAppSelector(selectStockAmt)
     const price = useAppSelector(selectPrice)
     const descriptionDetail = useAppSelector(selectDescriptionDetail)
     const [pendingPurchaseAmt, setPendingPurchaseAmt] = useState(0);
+    const [disablePurchaseAmt, setDisablePurchaseAmt] = useState(false)
 
     useEffect(() => {
-        console.log(`itemId`, itemId)
         dispatch(getItemByItemId(itemId))
-        console.log(`stockAmt`, inStock)
     }, [])
 
     useEffect(() => {
         if (inStock === false) {
-            console.log(`58`)
             setDisableRemoveButton(true)
             setDisableAddButton(true)
+            setDisablePurchaseAmt(true)
         } else {
-            console.log(`67`)
             setDisableRemoveButton(false)
             setDisableAddButton(false)
+            setDisablePurchaseAmt(false)
         }
     }, [inStock])
     function handleClickMinus() {
-
-        console.log(`pendingPurchaseAmt`, pendingPurchaseAmt)
         if (pendingPurchaseAmt <= 0) {
             return
         }
@@ -82,7 +68,6 @@ export const ItemDetail = () => {
     }
 
     function handleClickPlus() {
-        console.log(`pendingPurchaseAmt`, pendingPurchaseAmt)
         let amt = pendingPurchaseAmt
         amt = amt + 1;
         setPendingPurchaseAmt(amt);
@@ -97,14 +82,18 @@ export const ItemDetail = () => {
             amount: pendingPurchaseAmt,
             cartId: cartId,
             userId: userName,
-            mode:"ITEM_DETAIL"
+            mode: "ITEM_DETAIL"
         }))
+        let object: any = {}
+        object = {
+            popupStatus: true,
+            severity: "success",
+            alertText: "己加入購物車",
+        }
+        dispatch(openPopup(object))
     }
 
     function handleChangeAmt(e: any) {
-        console.log(`e`, e.target.value)
-        console.log(`isNaN(e.target.value)`, isNaN(e.target.value))
-        console.log(`isNaN(e.target.value)`, e.target.value)
         if (isNaN(e.target.value) === false && e.target.value >= 0) {
             if (e.target.value <= stockAmt) {
                 setPendingPurchaseAmt(e.target.value);
@@ -113,10 +102,8 @@ export const ItemDetail = () => {
             }
 
             if (e.target.value === stockAmt) {
-                console.log(`104`)
                 setDisableAddButton(true)
             } else if (e.target.value === 0) {
-                console.log(`107`)
                 setDisableRemoveButton(true)
             }
             else if (
@@ -132,12 +119,13 @@ export const ItemDetail = () => {
     return (
         <>
             <Grid container>
+                <Grid size={12}>
+                    <br></br>
+                </Grid>
                 <Grid size={6}>
                     <Box className="product-box">
                         <img className='image-cust' src={`/img/item/${productId}/itemCard.jpg`}></img>
                     </Box>
-
-                    {/* <span>this is photo area</span> */}
                 </Grid>
                 <Grid size={6}>
                     <Grid size={12}>
@@ -181,6 +169,7 @@ export const ItemDetail = () => {
                                                 }
                                             }}
                                             // inputProps={{min: 0, style: { textAlign: 'center' }}} 
+                                            disabled={disablePurchaseAmt}
                                             onChange={(e) => { handleChangeAmt(e) }}
                                             value={pendingPurchaseAmt} />
                                     </Grid>
@@ -198,12 +187,12 @@ export const ItemDetail = () => {
                             </div>
                         </Grid>
                         <Grid size={6}>
-                            <button type="button" className="plus" onClick={handleAddCart}>加入購物車</button>
+                            {disablePurchaseAmt === true && <button type="button" className="plus-disabled" onClick={handleAddCart} disabled>加入購物車</button>}
+                            {disablePurchaseAmt !== true && <button type="button" className="plus" onClick={handleAddCart} >加入購物車</button>}
                         </Grid>
                     </Grid>
                 </Grid>
             </Grid>
-            <pre>{JSON.stringify(pendingPurchaseAmt,null,2)}</pre>
             <Grid container>
                 <Grid size={12}>
                     <div className='group-title'>描述</div>

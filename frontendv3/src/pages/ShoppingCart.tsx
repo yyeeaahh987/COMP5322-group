@@ -1,7 +1,5 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Grid from '@mui/material/Grid2';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
@@ -13,6 +11,7 @@ import { selectUserName } from '../features/login/userSlice';
 import { closeLoading, openLoading } from '../features/loader/loadingSlice';
 import { placeOrder } from '../features/order/orderSlice';
 import { useNavigate } from 'react-router-dom';
+import { openPopup } from '../features/alertPopup/alertPopupSlice';
 
 interface CartProps {
   itemId: number;
@@ -26,32 +25,28 @@ export const ShoppingCart = () => {
   const cartId = useAppSelector(selectCartId)
   const items = useAppSelector(selectItems)
   const userName = useAppSelector(selectUserName)
-  console.log(`cartId`, cartId)
-  console.log(`items`, items)
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   function handleOrder() {
-    console.log(`handleOrder`)
+    dispatch(openLoading())
     let requestObj = {
       cartId: cartId,
-      userId:userName,
+      userId: userName,
     }
-    try{
+    try {
       dispatch(placeOrder(requestObj))
       //success nevigate to order
       navigate("/home/order");
-    }catch(e){
+      let object: any = {}
+      object = {
+        popupStatus: true,
+        severity: "success",
+        alertText: "下單成功",
+      }
+      dispatch(openPopup(object))
+    } catch (e) {
 
     }
-
+    dispatch(closeLoading())
   }
   return (
     <>
@@ -75,31 +70,30 @@ export const ShoppingCart = () => {
           <Button variant='outlined' onClick={handleOrder}>下單</Button>
         </>
       }
+      {
+        items.length === 0 &&
+        <>
+          <h3>沒有物品在購物車</h3>
+        </>
+      }
     </>
   );
 }
 
 
 const CartItem = ((props: CartProps) => {
-  console.log(`props`, props)
   const dispatch = useAppDispatch()
   const userName = useAppSelector(selectUserName)
   const cartId = useAppSelector(selectCartId)
   const [disableRemoveButton, setDisableRemoveButton] = useState(false);
-  console.log(`disableRemoveButton`, disableRemoveButton)
   const [disableAddButton, setDisableAddButton] = useState(false);
-  console.log(`disableAddButton`, disableAddButton)
   useEffect(() => {
     if (props.amount === 0) {
       setDisableRemoveButton(true)
     }
-    // if(){
-
-    // }
   }, [props.amount])
   function handleClickMinus() {
     let newAmount = props.amount - 1
-    console.log(`newAmount`, newAmount)
     dispatch(openLoading())
     dispatch(deleteItem({
       cartId: cartId,
@@ -120,7 +114,6 @@ const CartItem = ((props: CartProps) => {
   }
   function handleClickPlus() {
     let newAmount = props.amount + 1
-    console.log(`newAmount`, newAmount)
     dispatch(openLoading())
     dispatch(addItem({
       cartId: cartId,
@@ -135,6 +128,9 @@ const CartItem = ((props: CartProps) => {
     <>
       <Box>
         <Grid container>
+          <Grid size={12}>
+            <br></br>
+          </Grid>
           <Grid size={2}>
             <img className='image-cust' src={`/img/item/${props.itemId}/itemCard.jpg`}></img>
           </Grid>
@@ -162,7 +158,6 @@ const CartItem = ((props: CartProps) => {
                         style: { textAlign: 'center' }
                       }
                     }}
-                    // onChange={(e) => { handleChangeAmt(e) }}
                     value={props.amount}
                   />
 

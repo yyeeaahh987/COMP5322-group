@@ -1,6 +1,4 @@
-import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
-import type { AppThunk } from "../../app/store"
 import { postRequestOptions } from "../../utils/constant"
 // import { fetchCount } from "./counterAPI"
 const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
@@ -53,56 +51,22 @@ export const itemDetailSlice = createAppSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: create => ({
-    // login: create.reducer(state => {
-
-    // }),
-    // validateLogin: create.asyncThunk(async (data: any) => {
-    //   // const response = await fetch(amount)
-    //   // // The value we return becomes the `fulfilled` action payload
-    //   // return response.data
-    //   // console.log(`async`, data)
-    //   // return true;
-    // }, {
-    //   pending: state => {
-    //     state.status = "loading"
-    //   },
-    //   fulfilled: (state, action) => {
-    //     state.status = "idle"
-    //     // if (action.payload != null) {
-    //     //   state.loginSuccess = true
-    //     // } else {
-    //     //   state.loginSuccess = false
-    //     // }
-    //   },
-    //   rejected: state => {
-    //     state.status = "failed"
-    //   },
-    // }),
-
     getItemByItemId: create.asyncThunk(async (data: any) => {
-        // const response = await callAPI
-        console.log(`async`, data)
-
-
         let requestOption ={
           ...postRequestOptions,
           body: JSON.stringify({ 
             itemId: data
           })
         }
-
         const response = await fetch(`${BACKEND_SERVER}/item/getItemByItemId`, requestOption)
         const result = await response.json()
-        console.log(`result`, result)
         return result?.result??null
-
       }, 
       {
         pending: state => {
           state.status = "loading"
         },
         fulfilled: (state, action) => {
-          console.log(`action`,action)
           state.status = "idle"
           if(action.payload !== null){
             state.productId = action.payload.ITEM_ID
@@ -111,12 +75,12 @@ export const itemDetailSlice = createAppSlice({
             state.productChiName= action.payload.CHI_NAME,
             state.productImage= action.payload.IMAGE
             state.productUnit= action.payload.UNIT
-            if((action?.payload?.AMOUNT??0) >0){
+            if((action?.payload?.STOCK??0) >0){
               state.inStock = true     
             }else{
               state.inStock = false
             }
-            state.stockAmt = action?.payload?.AMOUNT??0
+            state.stockAmt = action?.payload?.STOCK??0
             state.price = action?.payload?.PRICE??0.00
             state.descriptionDetail = action?.payload?.DESCRIPTION??""
           }else{
@@ -178,15 +142,3 @@ export const {
   selectLanguage,
   selectUsed,
 } = itemDetailSlice.selectors
-
-// // We can also write thunks by hand, which may contain both sync and async logic.
-// // Here's an example of conditionally dispatching actions based on current state.
-// export const incrementIfOdd =
-//   (amount: number): AppThunk =>
-//   (dispatch, getState) => {
-//     const currentValue = selectCount(getState())
-
-//     if (currentValue % 2 === 1 || currentValue % 2 === -1) {
-//       dispatch(incrementByAmount(amount))
-//     }
-//   }

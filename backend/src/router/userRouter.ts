@@ -57,7 +57,7 @@ router.post('/registerNewUser', async function (req: Request, res: Response) {
     // const { userId,password, email,firstName,lastName,chiName,address,phoneNumber,language, used } = req.body
     // const result = await UserService.createUser(userId,password, email,firstName,lastName,chiName,address,phoneNumber,language, used);
     const { username,password} = req.body
-    const result = await UserService.createUser(username,password, "","","","","","","", "");
+    const result = await UserService.createUser(username,password, "","","","","","","", "1");
     if (result == ReturnStatusMessage.SUCCESS) {
         resultObj.code = ReturnStatusCode.SUCCESS
         resultObj.message = "success"

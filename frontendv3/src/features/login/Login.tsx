@@ -1,17 +1,15 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import Grid from '@mui/material/Grid2';
-import { Box, Button, Input, TextField } from "@mui/material"
+import { Box, Button, TextField } from "@mui/material"
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
     selectLoginSuccess,
-    selectUserName,
     validateLogin
 } from "./userSlice"
 import { Header } from "../header/Header";
 import { Declare } from "../declare/Declare";
-import { getCartByUserId } from "../smallShoppingCart/shoppingCartSlice";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import './login.css'
 import { closeLoading, openLoading } from "../loader/loadingSlice";
 
@@ -22,7 +20,6 @@ export const Login = () => {
     const loginSuccess = useAppSelector(selectLoginSuccess)
 
     useEffect(() => {
-        console.log(`loginSuccess`, loginSuccess)
         if (loginSuccess === true) {
             navigate("/home/promotion");
         }
@@ -41,7 +38,6 @@ export const Login = () => {
         }
     });
     const onSubmit: SubmitHandler<any> = (data) => {
-        console.log(data)
         dispatch(openLoading())
         dispatch(validateLogin(data))
         dispatch(closeLoading())

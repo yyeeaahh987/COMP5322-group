@@ -5,36 +5,22 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import Grid from '@mui/material/Grid2';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import HomeIcon from '@mui/icons-material/Home';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { NavBar } from '../navbar/NavBar';
-import { ItemCard } from '../card/ItemCard';
 import { Outlet, Route, Routes, useNavigate } from 'react-router-dom';
-import { ItemDetail } from '../itemDetail/ItemDetail';
-import { postRequestOptions } from '../../utils/constant';
 import { Header } from '../header/Header';
 import { Declare } from '../declare/Declare';
 import './home.css'
 import { logout, selectUserName } from '../login/userSlice';
-import { SShoppingCart } from '../smallShoppingCart/SShoppingCart';
 import { getCartByUserId } from '../smallShoppingCart/shoppingCartSlice';
-
-const BACKEND_SERVER = process.env.REACT_APP_BACKEND_SERVER;
-const DOMAIN = process.env.REACT_APP_DOMAIN;
-interface IFormInput {
-    accountName: string
-    accountPasswowrd: string
-}
+import { openPopup } from '../alertPopup/alertPopupSlice';
 
 const pages = ['食品及飲品', '母嬰'];
 const settings = [
@@ -63,29 +49,9 @@ export const Home = () => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate();
     const userName = useAppSelector(selectUserName)
-    console.log(`userName`,userName)
-    const [file, setFile]: any = useState(null);
-    const [fileId, setFileId]: any = useState(null);
-
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-    const [anchorElShop, setAnchorElShop] = useState<null | HTMLElement>(null);
-
     const [anchorFirstMenu, setAnchorFirstMenu] = useState<null | HTMLElement>(null);
-    const [anchorSecondMenu, setAnchorSecondMenu] = useState<null | HTMLElement>(null);
-    const [anchorThirdMenu, setAnchorThirdMenu] = useState<null | HTMLElement>(null);
-    const [anchorForthMenu, setAnchorForthMenu] = useState<null | HTMLElement>(null);
-    const [anchorFifthMenu, setAnchorFifthMenu] = useState<null | HTMLElement>(null);
-
     const [dropdownFirstMenu, setDropdownFirstMenu] = useState(false)
-    const [dropdownSecondMenu, setDropdownSecondMenu] = useState(false)
-    const [dropdownThirdMenu, setDropdownThirdMenu] = useState(false)
-    const [dropdownForthMenu, setDropdownForthMenu] = useState(false)
-    const [dropdownFifthMenu, setDropdownFifthMenu] = useState(false)
-
-    const [dropdownCartMenu, setDropdownCartMenu] = useState(false)
-
-
     const [subMenu, setSubMenu] = useState<null | number>(null)
 
     useEffect(() => {
@@ -94,69 +60,8 @@ export const Home = () => {
         }
     }, [userName])
 
-
-    const handleFileChange = (event: any) => {
-        setFile(event.target.files[0]);
-    };
-
-    const handleFileIdChange = (event: any) => {
-        setFileId(event.target.value);
-    };
-
-    const handleSubmit = async (event: any) => {
-        event.preventDefault();
-        //   const formData = new FormData();
-        //   formData.append('file', file);
-        //   formData.append('id', fileId);
-
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async function () {
-            console.log(reader.result);
-
-            let body = {
-                file: reader.result,
-                id: fileId
-            }
-            let requestOption = {
-                ...postRequestOptions,
-                body: JSON.stringify(body)
-            }
-            console.log(`requestOption`, requestOption)
-            const response = await fetch(`${BACKEND_SERVER}/item/uploadImage`, requestOption)
-            const result = await response.json()
-            console.log(`result`, result)
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
-
-
-
-
-
-        //   fetch('/file/upload', {
-        //     method: 'POST',
-        //     body: formData,
-        //   })
-        //   .then(response => response.json())
-        //   .then(data => {
-        //     console.log('Success:', data);
-        //   })
-        //   .catch((error) => {
-        //     console.error('Error:', error);
-        //   });
-    };
-
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = () => {
@@ -169,27 +74,23 @@ export const Home = () => {
         navigate("/home/cart");
     };
 
-    const handleCloseSmallShoppingCart = () => {
-        setAnchorElShop(null);
-        setDropdownCartMenu(false);
-    };
-
     function handleIconMenuOnClick(action: string) {
         if (action === "logout") {
-            navigate('/')
             dispatch(logout())
+            navigate("/")
+            let object: any = {}
+            object = {
+                popupStatus: true,
+                severity: "success",
+                alertText: "Logout success",
+            }
+            dispatch(openPopup(object))
         }else if(action === "order"){
-            navigate('/home/order')
-            // dispatch(logout())
+            navigate("/home/order")
         }
     }
 
-    function handleOpenShoppingCart() {
-        navigate(`/home/cart`)
-    }
-
     function handleMouseOver(event: React.MouseEvent<HTMLElement>, index: number) {
-        console.log(`handleMouseOver`, index)
         setDropdownFirstMenu(false);
         setAnchorFirstMenu(event.currentTarget);
         setDropdownFirstMenu(true);
@@ -197,16 +98,9 @@ export const Home = () => {
     }
 
     function handleMouseLeave(event: React.MouseEvent<HTMLElement>, index: number) {
-        // console.log(`handleMouseLeave`)
-        // setAnchorFirstMenu(null);
-        console.log(`handleMouseLeave`, index)
         setAnchorFirstMenu(null);
         setDropdownFirstMenu(false)
         setSubMenu(null)
-    }
-
-    function handleMenuClose() {
-
     }
 
     function handleClickHome() {
@@ -216,50 +110,11 @@ export const Home = () => {
     return (
         <>
             <Header></Header>
-
             <Grid container>
                 <Grid size={12}>
                     <AppBar position="static">
                         <Container maxWidth="xl" className='nav-main'>
                             <Toolbar disableGutters>
-                                {/* <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                                    <IconButton
-                                        size="large"
-                                        aria-label="account of current user"
-                                        aria-controls="menu-appbar"
-                                        aria-haspopup="true"
-                                        onClick={handleOpenNavMenu}
-                                        color="inherit"
-                                    >
-                                        <MenuIcon />
-                                    </IconButton>
-                                    <Menu
-                                        id="menu-appbar"
-                                        anchorEl={anchorElNav}
-                                        anchorOrigin={{
-                                            vertical: 'bottom',
-                                            horizontal: 'left',
-                                        }}
-                                        keepMounted
-                                        transformOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'left',
-                                        }}
-                                        open={Boolean(anchorElNav)}
-                                        onClose={handleCloseNavMenu}
-                                        sx={{ display: { xs: 'block', md: 'none' } }}
-                                    >
-                                        {pages.map((page) => (
-                                            <>
-
-                                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                                    <Typography sx={{ textAlign: 'center' }} aria-owns={"simple-menu"} onMouseOver={handleMouseOver}>{page}</Typography>
-                                                </MenuItem>
-                                              
-                                            </>
-                                        ))}
-                                    </Menu>
-                                </Box> */}
 
                                 <Box sx={{ flexGrow: 0 }} className="nav-icon-box">
                                     <IconButton onClick={handleClickHome} sx={{ p: 0 }}>
@@ -272,17 +127,13 @@ export const Home = () => {
                                         <>
                                             <Button
                                                 key={index}
-                                                // onClick={handleMouseOver}
                                                 aria-owns={"simple-menu"}
                                                 onMouseOver={(event) => { handleMouseOver(event, index) }}
-                                                // onMouseLeave={(event) => { handleMouseLeave(event, index) }}
                                                 className='nav-button'
                                                 sx={{ my: 2, color: 'white', display: 'block' }}
                                             >
                                                 {page}
-
                                             </Button>
-
                                         </>
                                     ))}
                                     <Menu
@@ -298,7 +149,6 @@ export const Home = () => {
                                             horizontal: "center"
                                         }}
                                         MenuListProps={{ onMouseLeave: (e) => { handleMouseLeave(e, 0) } }}
-                                    // onClose={handleMenuClose}
                                     >
                                         {(subMenu == 0) &&
                                         categoryMenu0.map((eachSubMenu)=>{
@@ -327,28 +177,6 @@ export const Home = () => {
                                         sx={{ p: 0 }}>
                                         <ShoppingCartIcon className='nav-icon'></ShoppingCartIcon>
                                     </IconButton>
-                                    {/* <Menu
-                                        id="menu-shopping-cart"
-                                        anchorEl={anchorElShop}
-                                        open={dropdownCartMenu}
-                                        anchorOrigin={{
-                                            vertical: "bottom",
-                                            horizontal: "center"
-                                        }}
-                                        transformOrigin={{
-                                            vertical: "top",
-                                            horizontal: "center"
-                                        }}
-                                        MenuListProps={{   
-                                            onMouseLeave: (e) => { handleMouseLeave(e, 0) } 
-                                        }}
-                                    >
-                                        <>
-                                        <MenuItem>
-                                        <SShoppingCart></SShoppingCart>
-                                        </MenuItem>
-                                        </>
-                                    </Menu> */}
                                 </Box>
                                 <Box></Box>
                                 <Box sx={{ flexGrow: 0 }} className="nav-icon-box">
@@ -384,40 +212,12 @@ export const Home = () => {
                             </Toolbar>
                         </Container>
                     </AppBar>
-
                 </Grid>
             </Grid>
 
-            <Grid container>
-                {/* <Grid size={12}>
-                    <span>{JSON.stringify(anchorFirstMenu, null, 2)}</span>
-                </Grid>
-                <Grid size={12}>
-                    <span>{JSON.stringify(anchorSecondMenu, null, 2)}</span>
-                </Grid>
-                <Grid size={12}>
-                    <span>{JSON.stringify(anchorThirdMenu, null, 2)}</span>
-                </Grid>
-                <Grid size={12}>
-                    <span>{JSON.stringify(anchorForthMenu, null, 2)}</span>
-                </Grid>
-                <Grid size={12}>
-                    <span>{JSON.stringify(anchorFifthMenu, null, 2)}</span>
-                </Grid> */}
-            </Grid>
-            {/* this part is for upload image only */}
-            {/* <form onSubmit={handleSubmit}>
-                <input type="text" onChange={handleFileIdChange} ></input>
-                <input type="file" onChange={handleFileChange} />
-                <button type="submit">Upload</button>
-            </form> */}
             <Box className="main-box">
                 <Outlet></Outlet>
             </Box>
-
-            {/* <Routes>
-                <Route path="/home/item/detail/:id" element={<ItemDetail></ItemDetail>}></Route>
-            </Routes> */}
             <Declare></Declare>
         </>
     )

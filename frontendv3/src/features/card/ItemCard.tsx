@@ -15,10 +15,7 @@ interface ItemCardProps {
 export const ItemCard = ((props:ItemCardProps) => {
     const navigate = useNavigate();
     const [expanded, setExpanded] = useState(false);
-
-
     const handleClickItem = ()=>{
-        console.log(`handleClickItem`)
         navigate(props.redirectLink);
     }
     

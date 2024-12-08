@@ -3,6 +3,7 @@ import moment from 'moment'
 import * as SqlService from '../service/sqlService';
 import {ReturnStatusCode , ReturnStatusMessage} from '../enum/enum'
 import mysql from 'mysql2';
+import { sha256 } from 'js-sha256';
 
 const DATABASE_URL = process.env.DATABASE_URL
 const DATABASE_NAME = process.env.DATABASE_NAME
@@ -17,9 +18,10 @@ const connection = mysql.createPool({
 })
     
 export async function validateAccountLogin(name:string, password:string) {
+    let hashPassword = sha256(password);
     try {
         let sql = `select count(*) as count from USER WHERE user_id = ? and PASSWORD = ?`
-        const [rows, fields]: any = await connection.promise().query(sql, [name,password]);
+        const [rows, fields]: any = await connection.promise().query(sql, [name,hashPassword]);
         let result = rows?.[0]?.count ?? 0;
         if(result ===0){
             return false;
@@ -44,11 +46,12 @@ export async function getUserDetailById(userId: string) {
 }
 
 export async function createUser(userId: string, password: string, email: string, firstName: string, lastName: string, chiName: string, address: string, phoneNumber: string, language: string,used: string) {
+    let hashPassword = sha256(password);
     try {
         let sql = `INSERT INTO USER (USER_ID, PASSWORD, EMAIL,FIRST_NAME,LAST_NAME,CHI_NAME,ADDRESS,CREATED_BY,CREATED_DATE,LAST_UPDATED_BY,LAST_UPDATED_DATE,PHONE_NUMBER,LANGUAGE, USED) 
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
         const [{ insertId }]: any = await connection.promise().query(sql,
-            [userId, password, email, firstName, lastName, chiName, address, "admin", moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), "admin", moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), phoneNumber, language,used]
+            [userId, hashPassword, email, firstName, lastName, chiName, address, "admin", moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), "admin", moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), phoneNumber, language,used]
         );
         return ReturnStatusMessage.SUCCESS
     } catch (e) {

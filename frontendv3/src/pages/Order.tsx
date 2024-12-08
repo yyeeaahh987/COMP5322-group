@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Grid from '@mui/material/Grid2';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { Box } from '@mui/material';
@@ -16,12 +15,10 @@ interface OrderProps {
 export const Order = () => {
     const dispatch = useAppDispatch()
     const orders = useAppSelector(selectOrders)
-    console.log(`orders`, orders)
     const userName = useAppSelector(selectUserName)
 
     useEffect(() => {
         (async () => {
-            console.log(`init async`, userName)
             dispatch(getOrder(userName))
         })
             ()

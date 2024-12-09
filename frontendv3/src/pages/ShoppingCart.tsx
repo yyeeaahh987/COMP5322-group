@@ -1,10 +1,9 @@
-import * as React from 'react';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid2';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { addItem, deleteItem, selectCartId, selectItems } from '../features/smallShoppingCart/shoppingCartSlice';
+import { addItem, deleteItem, selectCartId, selectItems, clearShoppingCart, getCartByUserId } from '../features/smallShoppingCart/shoppingCartSlice';
 import { Box, IconButton, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { selectUserName } from '../features/login/userSlice';
@@ -26,6 +25,12 @@ export const ShoppingCart = () => {
   const items = useAppSelector(selectItems)
   const userName = useAppSelector(selectUserName)
 
+  useEffect(()=>{
+    (()=>{
+      dispatch(getCartByUserId(userName))
+    })
+    ()
+  },[])
   function handleOrder() {
     dispatch(openLoading())
     let requestObj = {
@@ -34,6 +39,7 @@ export const ShoppingCart = () => {
     }
     try {
       dispatch(placeOrder(requestObj))
+
       //success nevigate to order
       navigate("/home/order");
       let object: any = {}
@@ -43,6 +49,7 @@ export const ShoppingCart = () => {
         alertText: "下單成功",
       }
       dispatch(openPopup(object))
+
     } catch (e) {
 
     }

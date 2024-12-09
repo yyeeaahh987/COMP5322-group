@@ -45,6 +45,10 @@ export const shoppingCartSlice = createAppSlice({
         if (action.payload != null) {
           state.cartId = action.payload.cartId
           state.items = action.payload.items
+        }else{
+          state.cartId = null
+          state.items = []
+
         }
       },
       rejected: state => {
@@ -107,8 +111,8 @@ export const shoppingCartSlice = createAppSlice({
       fulfilled: (state, action: any) => {
         state.status = "idle"
         if (action.payload != null) {
-          state.cartId = action.payload.cartId
-          state.items = action.payload.items
+          state.cartId = action?.payload?.cartId??null
+          state.items = action?.payload?.items??[]
         }
       },
       rejected: state => {
@@ -130,7 +134,7 @@ export const shoppingCartSlice = createAppSlice({
 })
 
 // Action creators are generated for each case reducer function.
-export const { getCartByUserId, addItem, deleteItem } =
+export const { getCartByUserId, addItem, deleteItem, clearShoppingCart } =
   shoppingCartSlice.actions
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.

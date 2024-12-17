@@ -37,14 +37,14 @@ export async function getTodaySuggestList() {
         const [rows, fields]: any = await connection.promise().query(sql);
         let result = rows ? rows : null;
         if (result != null) {
-            result.forEach((item: any, index: any) => {
-                // Replace the buffer array with base64 data
-                const imgBase64 = item.IMAGE.toString('base64');
-                result[index] = {
-                    ...item,
-                    imageBase64: imgBase64
-                }
-            })
+            // result.forEach((item: any, index: any) => {
+            //     // Replace the buffer array with base64 data
+            //     const imgBase64 = item.IMAGE.toString('base64');
+            //     result[index] = {
+            //         ...item,
+            //         imageBase64: imgBase64
+            //     }
+            // })
         }
         return result
     } catch (e) {

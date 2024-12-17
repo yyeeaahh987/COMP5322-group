@@ -27,7 +27,8 @@ export async function getCartByUserId(userId: string) {
         let sql = `select * from SHOPPING_CART sc where CART_ID = (select CART_ID  from SHOPPING_CART_SUBSCRIPTION scs where USER_ID = ?)`
         const [rows, fields]: any = await connection.promise().query(sql, [userId]);
         let result = rows ? rows : null
-        if (result != null) {
+        if (result != null && result.length >0) {
+            console.log(`result`,result)
             cart.cartId = result[0].CART_ID
             for (let i = 0; i < result.length; i++) {
                 let shopItem = await itemService.getItemByItemId(result[i].ITEM_ID)
